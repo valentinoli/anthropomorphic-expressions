@@ -1,11 +1,12 @@
 <template>
-  <div class="home">
+  <div class="survey">
+    Survey {{ $route.params.id }}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Survey',
   components: {
   },
 };
