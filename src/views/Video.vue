@@ -33,7 +33,7 @@
 import WebcamDetectorAndVideoInterplay from '@/utils/webcam-video-interplay';
 import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
 import playbackRanges from '@/utils/playback-range';
-import processData from '@/utils/process-data';
+import processResults from '@/utils/process-affdex-predictions';
 
 export default {
   name: 'Video',
@@ -97,8 +97,10 @@ export default {
 
       const { path } = this.$route;
 
-      // Process the predictions and save in local storage
-      const data = processData(this.interplay.data);
+      // Process the predictions and save data in local storage
+      const { timestamps, results } = this.interplay.data;
+      const processedResults = processResults(results);
+      const data = { timestamps, data: processedResults };
       setItem(path, JSON.stringify(data));
 
       // Set the latest completed step of the current participant
