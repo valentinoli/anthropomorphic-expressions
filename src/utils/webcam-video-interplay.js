@@ -80,7 +80,6 @@ export default class WebcamDetectorAndVideoInterplay {
 
   onImageResultsSuccess(faces, image, timestamp) {
     console.log(`Timestamp: ${timestamp}`);
-    // console.log(`Number of faces found: ${faces.length}`);
 
     if (faces.length > 0) {
       const {

@@ -53,7 +53,7 @@
             </template>
 
             <!-- Display current view -->
-            <v-container fluid class="view-container elevation-2">
+            <v-container fluid class="view-container">
               <v-row>
                 <v-col class="d-none d-sm-block" sm="1"></v-col>
                 <v-col cols="12" sm="10">

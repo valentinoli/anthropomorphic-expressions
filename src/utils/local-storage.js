@@ -10,6 +10,8 @@ const getSubmitted = () => getItem('submitted');
 const clearStorage = () => window.localStorage.clear();
 
 export {
+  setItem,
+  getItem,
   setLatestCompletedStep,
   getLatestCompletedStep,
   setSubmitted,

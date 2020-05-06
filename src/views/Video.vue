@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import { setLatestCompletedStep } from '@/utils/local-storage';
-import playbackRanges from '@/utils/playback-range';
 import WebcamDetectorAndVideoInterplay from '@/utils/webcam-video-interplay';
-import saveData from '@/utils/save-video-data';
+import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
+import playbackRanges from '@/utils/playback-range';
+import processData from '@/utils/process-data';
 
 export default {
   name: 'Video',
@@ -83,29 +83,33 @@ export default {
       // --> hide overlay
       this.overlay = false;
     },
-    async onVideoPause() {
+    onVideoPause() {
       // Video doesn't necessarily stop at the end
       // since we specify a playback range
       // so we have to listen for the "pause" event
       // and not "ended"
+      // User can't pause the video manually
+      // (perhaps programmatically in the console!)
 
       // Stop the detector and show overlay loading state
       this.interplay.stopDetector();
       this.overlay = true;
 
-      try {
-        await saveData(this.interplay.data);
+      const { path } = this.$route;
 
-        // Set the latest completed step of the current participant
-        // and save it in browser's local storage
-        setLatestCompletedStep(this.$route.path);
+      // Process the predictions and save in local storage
+      const data = processData(this.interplay.data);
+      setItem(path, JSON.stringify(data));
 
+      // Set the latest completed step of the current participant
+      // and save it in browser's local storage
+      setLatestCompletedStep(this.$route.path);
+
+      window.setTimeout(() => {
         // Redirect user to the survey when data has been saved
         const nextPath = `/survey/${this.id}`;
         this.$router.replace(nextPath);
-      } catch (err) {
-        console.error(err);
-      }
+      }, 1000);
     },
   },
 };
@@ -113,6 +117,7 @@ export default {
 
 <style scoped>
   .video-container {
+    /* To be able to use absolute positioning of the overlay */
     position: relative;
   }
 
