@@ -23,6 +23,11 @@ const routes = [
     component: () => import('../views/Video.vue'),
   },
   {
+    path: '/submit',
+    name: 'Submit',
+    component: () => import('../views/Submit.vue'),
+  },
+  {
     path: '/thanks',
     name: 'Thanks',
     component: () => import('../views/Thanks.vue'),

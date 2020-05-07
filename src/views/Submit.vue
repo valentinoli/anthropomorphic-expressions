@@ -1,18 +1,81 @@
 <template>
-  <div>
-    <p><strong>Thanks for participating in our study!</strong></p>
-    <p>Please encourage people around you to participate too!</p>
+  <div class='submit'>
+    <v-overlay
+      :value="overlay"
+    >
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
+    <div class="text-center">
+      <p class="title">
+        You have reached the end!
+      </p>
+      <p>
+        The final step is to submit your data
+      </p>
+      <p>
+        Please click the button below
+      </p>
+      <v-btn @click="submit" color="success" class="mt-4 mb-6">
+        submit data
+      </v-btn>
+      <div v-if="error">
+        Some error occurred while saving the data
+        <p>
+          <a href="mailto:valentin.loftsson@epfl.ch,paul.griesser@epfl.ch">
+            Please send us an email with the below error
+          </a>
+        </p>
+        <div>
+          <code>
+            {{ message }}
+          </code>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
+import uploadData from '@/utils/upload-data';
 import { setSubmitted, clearStorage } from '@/utils/local-storage';
 
 export default {
   name: 'Submit',
-  mounted() {
-    clearStorage();
-    setSubmitted();
+  data() {
+    return {
+      overlay: false,
+      error: false,
+      message: '',
+    };
+  },
+  methods: {
+    async submit() {
+      try {
+        this.overlay = true;
+        await uploadData();
+
+        // Clear storage and
+        // save user's progress as "submitted"
+        // so that he/she can't repeat the experiment
+        clearStorage();
+        setSubmitted();
+
+        window.setTimeout(() => {
+          // Redirect user to /thanks
+          this.$router.replace('/thanks');
+        }, 1000);
+      } catch (err) {
+        this.error = true;
+        this.message = err;
+        console.error(err);
+      } finally {
+        this.overlay = false;
+      }
+    },
   },
 };
 </script>
