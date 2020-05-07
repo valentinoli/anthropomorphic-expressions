@@ -6,7 +6,7 @@ export default {
   '/survey/2': 'Survey 2',
   '/video/3': 'Video 3',
   '/survey/3': 'Survey 3',
-  '/thanks': 'Complete',
+  '/submit': 'Submit',
 };
 
 export const videos = ['/video/1', '/video/2', '/video/3'];

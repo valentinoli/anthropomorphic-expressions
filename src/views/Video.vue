@@ -105,7 +105,7 @@ export default {
 
       // Set the latest completed step of the current participant
       // and save it in browser's local storage
-      setLatestCompletedStep(this.$route.path);
+      setLatestCompletedStep(path);
 
       window.setTimeout(() => {
         // Redirect user to the survey when data has been saved

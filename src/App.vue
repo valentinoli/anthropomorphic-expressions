@@ -19,7 +19,7 @@
         <v-row align="center" justify="center">
           <v-col cols="12">
             <!-- Don't show step info on index page -->
-            <template v-if="$route.path !== '/'">
+            <template v-if="$route.path !== '/' && $route.path !== '/thanks'">
               <!-- Don't show stepper on mobile -->
               <template v-if="$vuetify.breakpoint.smAndUp">
                 <v-stepper
@@ -30,7 +30,7 @@
                     <template v-for="([key, value], index) in steps">
                       <v-stepper-step
                         :key="`${key}-step`"
-                        :complete="currentStep > index + 1"
+                        :complete="currentStep > (index + 1)"
                         :step="index + 1"
                       >
                         {{ value }}
@@ -53,7 +53,7 @@
             </template>
 
             <!-- Display current view -->
-            <v-container fluid class="view-container elevation-1">
+            <v-container fluid class="view-container">
               <v-row>
                 <v-col class="d-none d-sm-block" sm="1"></v-col>
                 <v-col cols="12" sm="10">
@@ -81,11 +81,11 @@ export default {
   },
   data: () => ({
     steps: Object.entries(steps),
-    currentStep: 0,
+    currentStep: 1,
   }),
   watch: {
     $route(to) {
-      this.currentStep = this.steps.findIndex((entry) => entry[0] === to.path);
+      this.currentStep = this.steps.findIndex((entry) => entry[0] === to.path) + 1;
     },
   },
 };
