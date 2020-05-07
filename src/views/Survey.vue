@@ -40,6 +40,7 @@
           <v-radio-group
             v-model="item.value"
             :name="item.name"
+            :id="item.name"
             :rules="radioRules"
             required
             row
@@ -131,6 +132,11 @@ export default {
           const nextPath = this.id === 3 ? '/submit' : `/video/${this.id + 1}`;
           this.$router.replace(nextPath);
         }, 1000);
+      } else {
+        // Scroll to first error
+        const { id: firstErrorId } = this.$refs.form.inputs.find(({ hasError }) => hasError);
+        const el = document.getElementById(firstErrorId);
+        el.scrollIntoView();
       }
     },
     updateForm() {

@@ -21,21 +21,25 @@
       <v-btn @click="submit" color="success" class="mt-4 mb-6">
         submit data
       </v-btn>
-      <div v-if="error">
-        Some error occurred while saving the data
-        <p>
-          <a href="mailto:valentin.loftsson@epfl.ch,paul.griesser@epfl.ch">
-            Please send us an email with the below error
-          </a>
-        </p>
-        <div>
-          <code>
-            {{ message }}
-          </code>
-        </div>
-      </div>
     </div>
-
+    <v-alert type="error" outlined v-if="error">
+      <div class="d-flex justify-space-between">
+        <p>Some error occurred while saving the data</p>
+        <v-btn
+          depressed
+          color="error"
+          :href="`mailto:valentin.loftsson@epfl.ch,paul.griesser@epfl.ch?body=${message}`"
+        >
+          <v-icon left>mdi-email</v-icon>
+          Report error
+        </v-btn>
+      </div>
+      <div class="mt-2">
+        <code>
+          {{ message }}
+        </code>
+      </div>
+    </v-alert>
   </div>
 </template>
 
