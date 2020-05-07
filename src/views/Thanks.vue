@@ -1,18 +1,12 @@
 <template>
-  <div>
-    <p><strong>Thanks for participating in our study!</strong></p>
-    <p>Please encourage people around you to participate too!</p>
-  </div>
+  <v-alert type="success" outlined>
+    <strong>Thank your for your contribution. We hope you enjoyed it!</strong>
+    <div>Please encourage people around you to participate too</div>
+  </v-alert>
 </template>
 
 <script>
-import { setSubmitted, clearStorage } from '@/utils/local-storage';
-
 export default {
   name: 'Thanks',
-  mounted() {
-    clearStorage();
-    setSubmitted();
-  },
 };
 </script>

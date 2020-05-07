@@ -1,5 +1,5 @@
 <template>
-  <div class='survey'>
+  <div class="survey font-weight-light">
     <v-overlay
       :value="overlay"
     >
@@ -27,7 +27,7 @@
         ref="form"
         lazy-validation
       >
-        <p class="title text-center">
+        <p class="title font-weight-medium text-center">
           {{ form.title }}
         </p>
 
@@ -62,7 +62,7 @@
             color="success"
             @click="submit"
           >
-            {{ form.submitText }}
+            <v-icon left>mdi-send-circle-outline</v-icon>{{ form.submitText }}
           </v-btn>
         </v-row>
       </v-form>
@@ -123,11 +123,11 @@ export default {
         const submission = this.form.items.map(({ name, value }) => ({ name, value }));
         setItem(path, JSON.stringify(submission));
 
-        // Set the latest completed step of the current participant
-        // and save it in browser's local storage
-        setLatestCompletedStep(path);
-
         window.setTimeout(() => {
+          // Set the latest completed step of the current participant
+          // and save it in browser's local storage
+          setLatestCompletedStep(path);
+
           // Redirect user to next video/submission when data has been saved
           const nextPath = this.id === 3 ? '/submit' : `/video/${this.id + 1}`;
           this.$router.replace(nextPath);

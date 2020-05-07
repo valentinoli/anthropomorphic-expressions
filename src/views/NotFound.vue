@@ -1,5 +1,5 @@
 <template>
-  <span>Page Not Found</span>
+  <v-alert type="info" outlined>Page Not Found</v-alert>
 </template>
 
 <script>

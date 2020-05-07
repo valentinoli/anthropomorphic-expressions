@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import { getLatestCompletedStep, clearStorage } from '@/utils/local-storage';
-// import steps from '@utils/steps';
-// const stepPaths = Object.keys(stepPaths);
+import { getLatestCompletedStep } from '@/utils/local-storage';
+import steps from '@/utils/steps';
+
+const stepPaths = Object.keys(steps);
 
 Vue.use(VueRouter);
 
@@ -43,33 +44,39 @@ const router = new VueRouter({
   routes,
 });
 
-//
-// router.beforeEach((to, from, next) => {
-//   const latestCompletedStep = getLatestCompletedStep();
-//
-//   if (to.path === '/') {
-//     // User allowed to navigate to index whenever,
-//     // even in the middle of participating,
-//     // but in that case all data is erased
-//     // and the user has to start all over
-//     if (latestCompletedStep) {
-//       clearStorage();
-//     }
-//     console.log('index, next()');
-//     return next();
-//   }
-//
-//   const isNextStep = (stepPaths.indexOf(to.path) - stepPaths.indexOf(latestCompletedStep)) === 1;
-//
-//   if (isNextStep && latestCompletedStep) {
-//     // User allowed to continue to the next step
-//     // if previous step is completed
-//     console.log('next step, next()');
-//     return next();
-//   }
-//
-//   // User not allowed to navigate manually at all
-//   console.log('not allowed, next(false)');
-//   return next(false);
-// });
+
+router.beforeEach((to, from, next) => {
+  const latestCompletedStep = getLatestCompletedStep();
+
+  if (!latestCompletedStep && to.path === '/') {
+    // User allowed to navigate to index,
+    // but not during participation
+    return next();
+  }
+
+  const isNextStep = (stepPaths.indexOf(to.path) - stepPaths.indexOf(latestCompletedStep)) === 1;
+
+  if (isNextStep && latestCompletedStep) {
+    // User allowed to continue to the next step
+    // if previous step is completed
+    return next();
+  }
+
+  if (latestCompletedStep) {
+    const currentStep = stepPaths[stepPaths.indexOf(latestCompletedStep) + 1];
+
+    if (currentStep === to.path) {
+      // Allow user to stay on current step
+      return next();
+    }
+
+    // User might have tried to navigate manually
+    // to another endpoint. Navigate him back.
+    return next(currentStep);
+  }
+
+  // Otherwise, user not allowed to navigate manually at all
+  return next(false);
+});
+
 export default router;

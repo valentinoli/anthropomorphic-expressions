@@ -1,5 +1,5 @@
 <template>
-  <div class='submit'>
+  <div class="submit">
     <v-overlay
       :value="overlay"
     >
@@ -19,7 +19,7 @@
         Please click the button below
       </p>
       <v-btn @click="submit" color="success" class="mt-4 mb-6">
-        submit data
+        <v-icon left>mdi-send-circle-outline</v-icon>submit data
       </v-btn>
     </div>
     <v-alert type="error" outlined v-if="error">

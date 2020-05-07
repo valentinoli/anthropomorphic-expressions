@@ -103,11 +103,11 @@ export default {
       const data = { timestamps, data: processedResults };
       setItem(path, JSON.stringify(data));
 
-      // Set the latest completed step of the current participant
-      // and save it in browser's local storage
-      setLatestCompletedStep(path);
-
       window.setTimeout(() => {
+        // Set the latest completed step of the current participant
+        // and save it in browser's local storage
+        setLatestCompletedStep(path);
+
         // Redirect user to the survey when data has been saved
         const nextPath = `/survey/${this.id}`;
         this.$router.replace(nextPath);

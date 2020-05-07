@@ -12,8 +12,6 @@
       <span>Anthropomorphic Attitudes Towards Robots</span>
     </v-app-bar> -->
 
-    <!-- Check window.navigator.mediaDevices property support  -->
-
     <v-content>
       <v-container fluid>
         <v-row align="center" justify="center">
@@ -67,8 +65,11 @@
       </v-container>
     </v-content>
 
-    <!-- <v-footer app>
-    </v-footer> -->
+    <v-footer app elevation="2" dark class="d-flex justify-center font-weight-light">
+      <div>
+        <v-icon left>mdi-copyright</v-icon> 2020
+      </div>
+    </v-footer>
   </v-app>
 </template>
 
