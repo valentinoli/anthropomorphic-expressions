@@ -53,11 +53,11 @@
             <!-- Display current view -->
             <v-container fluid class="view-container">
               <v-row>
-                <v-col class="d-none d-sm-block" sm="1"></v-col>
-                <v-col cols="12" sm="10">
+                <v-col class="d-none d-sm-block" md="1" lg="2"></v-col>
+                <v-col cols="12" md="10" lg="8">
                   <router-view/>
                 </v-col>
-                <v-col class="d-none d-sm-block" sm="1"></v-col>
+                <v-col class="d-none d-sm-block" md="1" lg="2"></v-col>
               </v-row>
             </v-container>
           </v-col>

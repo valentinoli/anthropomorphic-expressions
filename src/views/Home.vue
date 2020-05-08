@@ -47,10 +47,10 @@
             and it has been suggested that anthropomorphism towards robots is an
             indication of acceptability, along with other factors.
           </p>
-          <h2>How can I participate?</h2>
+          <h2>How do I participate?</h2>
           <p>
             This web platform was created to facilitate the study and enable
-            individuals to participate. We warmly invite you to take part.
+            individuals to participate.
           </p>
           <p>
             You will watch <em>three</em> short videos of robots, each followed by a quick
@@ -62,6 +62,7 @@
           <p>
             At certain times during the experiment your face will be recorded,
             so we ask you to enable and authorize access to your web camera, if you have one.
+            Please make sure that your face, and only yours, is visible to the camera.
             Note that <strong>we will not save a video recording</strong> since
             the frames will be processed in real-time and <strong>no personal or
             traceable data will be stored</strong>. Your participation is <strong>completely
@@ -129,7 +130,7 @@
             </template>
           </div>
 
-          <h2>Who are we?</h2>
+          <h2 class="mt-4">Who are we?</h2>
           <p>
             We are two master's students in Data Science at EPFL.
             Our supervisor is prof. Ahmad Abu-Akel.
