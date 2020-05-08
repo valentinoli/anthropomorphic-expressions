@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { getLatestCompletedStep } from '@/utils/local-storage';
+import { getLatestCompletedStep, getSubmitted } from '@/utils/local-storage';
 import steps from '@/utils/steps';
 
 const stepPaths = Object.keys(steps);
@@ -47,6 +47,11 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const latestCompletedStep = getLatestCompletedStep();
+  const submitted = getSubmitted();
+
+  if (submitted && to.path === '/thanks') {
+    return next();
+  }
 
   if (!latestCompletedStep && to.path === '/') {
     // User allowed to navigate to index,

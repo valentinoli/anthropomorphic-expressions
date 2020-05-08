@@ -38,10 +38,10 @@ export default class WebcamDetectorAndVideoInterplay {
       // Detector is started
       console.log('Webcam access allowed');
     });
-    detector.addEventListener('onWebcamConnectFailure', () => {
+    detector.addEventListener('onWebcamConnectFailure', (error) => {
       // Access denied to web camera
       // Detector should not have started
-      console.error('Webcam access denied');
+      console.error('Webcam access denied', error);
     });
 
     // Add a callback to receive the results from processing an image.

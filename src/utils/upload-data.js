@@ -13,7 +13,8 @@ export default async () => {
     if (!item) {
       throw new Error(`Step ${path} is incomplete.`);
     }
-    data.video[path] = item;
+    const key = path.charAt(path.length - 1);
+    data.video[key] = JSON.parse(item);
   });
 
   surveys.forEach((path) => {
@@ -21,9 +22,11 @@ export default async () => {
     if (!item) {
       throw new Error(`Step ${path} is incomplete.`);
     }
-    data.survey[path] = item;
+    const key = path.charAt(path.length - 1);
+    data.survey[key] = JSON.parse(item);
   });
 
+  // log the data just in case
   console.log(data);
 
   const json = JSON.stringify(data);

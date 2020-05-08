@@ -295,7 +295,13 @@ affdex.CameraDetector = function(element, imgW, imgH, faceMode) {
     };
 
     self.videoElement.addEventListener("playing", playingFn);
-    self.videoElement.srcObject = stream;
+    // Older browsers may not have srcObject
+    if ("srcObject" in self.videoElement) {
+      self.videoElement.srcObject = stream;
+    } else {
+      // Avoid using this in new browsers, as it is going away.
+      self.videoElement.src = window.URL.createObjectURL(stream);
+    }
 
     self.getCallback("onWebcamConnect", true)();
   };
@@ -322,7 +328,7 @@ affdex.CameraDetector = function(element, imgW, imgH, faceMode) {
 
   self._startCamera = function() {
     navigator.mediaDevices.getUserMedia({
-      video: true,
+      video: { facingMode: "user" },  // true
       audio: false
     }).then(self.onWebcamReady).catch(self.getCallback("onWebcamConnect", false));
   };

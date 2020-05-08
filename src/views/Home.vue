@@ -14,18 +14,18 @@
       class="wall-e d-none d-md-block"
     ></v-img>
     <v-row>
-      <v-col cols="12" md="8">
-        <section class="font-weight-light text-justify">
-          <h1 class="display-1 font-weight-medium text-left">
+      <v-col cols="12">
+        <section class="font-weight-light">
+          <h1 class="display-1 font-weight-medium">
             Anthropomorphic Expressions Towards Robots
           </h1>
-          <p class="headline mb-4 mt-2 font-weight-regular text-left">
-            Predicting Anthropomorphic Attitudes Towards Robots
+          <div class="headline mb-4 mt-2 font-weight-regular text-left">
+            Predicting Anthropomorphic Attitudes Towards Robots<br>
             based on Physical Facial Expressions and Attributes
-          </p>
-          <p class="title font-weight-thin">
+          </div>
+          <div class="title mb-4 font-weight-thin text-left">
             A Study in Experimental Cognitive Psychology, EPFL 2020
-          </p>
+          </div>
           <p>
             Welcome dear visitor
           </p>
@@ -47,15 +47,15 @@
             and it has been suggested that anthropomorphism towards robots is an
             indication of acceptability, along with other factors.
           </p>
+          <h2>How can I participate?</h2>
           <p>
-            This web platform was created to facilitate our study and enable
-            individuals to participate. We warmly invite you to take part!
+            This web platform was created to facilitate the study and enable
+            individuals to participate. We warmly invite you to take part.
           </p>
-          <h2>How does it work?</h2>
           <p>
             You will watch <em>three</em> short videos of robots, each followed by a quick
             questionnaire about your impression of the robot. It should only take about
-            <u>15-20 minutes</u>. Note that if you need to pause and resume later,
+            <u>15-20 minutes</u> in total. Note that if you need to pause and resume later,
             you can stop at any point in time and even safely close the page, so long
             as you don't clear your browser's data.
           </p>
@@ -68,6 +68,7 @@
             anonymous</strong>.
           </p>
 
+          <!-- Browser does not support required APIs -->
           <v-alert
             v-if="unsupportiveBrowser"
             type="error"
@@ -79,26 +80,23 @@
             </div>
           </v-alert>
 
+          <!-- User already submitted on the current browser
+               according to local storage parameter -->
           <v-alert
-            v-if="isSubmitted"
+            v-else-if="getSubmitted()"
             type="info"
             outlined
           >
             You have already participated in the study. We appreciate your contribution!
           </v-alert>
 
+          <!-- Else allow participation -->
           <div v-else>
-            <v-btn
-              v-if="!webcamAuthorized"
-              @click="requestWebcam"
-              color="yellow"
-            >
-              <v-icon left>mdi-webcam</v-icon> authorize webcam
-            </v-btn>
-
+            <!-- Web camera authorized -->
             <template v-if="webcamAuthorized">
               <v-alert
                 type="success"
+                width="300"
               >
                 Camera access authorized
               </v-alert>
@@ -111,8 +109,44 @@
               </v-btn>
             </template>
 
+            <!-- Web camera not authorized access yet -->
+            <template v-else>
+              <v-alert
+                v-if="webcamDenied"
+                type="warning"
+                width="300"
+              >
+                Camera permission denied
+              </v-alert>
 
+              <v-btn
+                v-else
+                @click="requestWebcam"
+                color="yellow"
+              >
+                <v-icon left>mdi-webcam</v-icon> authorize webcam
+              </v-btn>
+            </template>
           </div>
+
+          <h2>Who are we?</h2>
+          <p>
+            We are two master's students in Data Science at EPFL.
+            Our supervisor is prof. Ahmad Abu-Akel.
+            We are interested in human-computer interaction and want to
+            help improve the coexistence of robots and humans.
+          </p>
+          <p>
+            Thank you for your support!
+          </p>
+
+          <v-row align="center" justify="center">
+            <Avatar
+              v-for="person in $options.people"
+              :key="person.src"
+              v-bind="person"
+            />
+          </v-row>
         </section>
       </v-col>
     </v-row>
@@ -121,13 +155,19 @@
 
 <script>
 import { getSubmitted, setLatestCompletedStep } from '@/utils/local-storage';
+import Avatar from '@/components/Avatar.vue';
+import valentinSrc from '@/assets/valentin.jpg';
+import ahmadSrc from '@/assets/ahmad.jpg';
 
 export default {
   name: 'Home',
+  components: {
+    Avatar,
+  },
   data() {
     return {
-      isSubmitted: getSubmitted(),
       webcamAuthorized: false,
+      webcamDenied: false,
       overlay: false,
     };
   },
@@ -137,17 +177,25 @@ export default {
       || !window.navigator.mediaDevices.getUserMedia
       || !window.localStorage
     );
-    console.log(this.unsupportiveBrowser);
+    if (this.unsupportiveBrowser) {
+      console.info('Browser unsupported');
+    }
   },
   methods: {
     requestWebcam() {
       window.navigator.mediaDevices.getUserMedia({
         video: true,
         audio: false,
-      }).then(() => {
+      }).then((stream) => {
         this.webcamAuthorized = true;
+        if (stream) {
+          stream.getTracks().forEach((track) => {
+            track.stop();
+          });
+        }
       }).catch((err) => {
         // Permission denied?
+        this.webcamDenied = true;
         console.error(err);
       });
     },
@@ -162,7 +210,31 @@ export default {
         this.$router.replace('/video/1');
       }, 3000);
     },
+    getSubmitted,
   },
+  people: [
+    {
+      src: valentinSrc,
+      name: 'Valentin Oliver Loftsson',
+      role: 'Data Science, MSc',
+      institution: 'EPFL',
+      email: 'valentin.loftsson@epfl.ch',
+    },
+    {
+      src: '',
+      name: 'Paul Griesser',
+      role: 'Data Science, MSc',
+      institution: 'EPFL',
+      email: 'paul.griesser@epfl.ch',
+    },
+    {
+      src: ahmadSrc,
+      name: 'Ahmad Abu-Akel',
+      role: 'Research Fellow, PhD',
+      institution: 'Institution of Psychology, UNIL',
+      email: 'ahmad.abuakel@unil.ch',
+    },
+  ],
 };
 </script>
 
@@ -173,7 +245,15 @@ export default {
 
 .wall-e {
   position: absolute;
-  right: 50px;
+  right: 0;
   top: 15px;
+}
+
+section p {
+  text-align: justify;
+}
+
+section h2 {
+  margin-bottom: 4px;
 }
 </style>

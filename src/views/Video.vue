@@ -2,7 +2,11 @@
   <div class="video-container">
     <div id="affdexElements"></div>
     <video id="robotVideo">
-      <source :src="`video/video${id}.mp4#t=${playbackRange}`" type="video/mp4">
+      <source
+        :src="`${
+          require(`@/assets/video/video${id}.mp4`)
+        }#t=${playbackRange}`"
+        type="video/mp4">
       <p>
         Your browser does not support HTML5 video
       </p>
@@ -37,8 +41,6 @@ import processResults from '@/utils/process-affdex-predictions';
 
 export default {
   name: 'Video',
-  components: {
-  },
   data() {
     return {
       overlay: true,

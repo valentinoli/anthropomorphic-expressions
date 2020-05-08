@@ -49,6 +49,7 @@ const putObject = (body) => {
       params,
       (err, data) => {
         if (err) {
+          console.error(err);
           reject(err);
         } else {
           resolve(data);

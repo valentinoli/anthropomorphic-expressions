@@ -19,7 +19,7 @@
         Please click the button below
       </p>
       <v-btn @click="submit" color="success" class="mt-4 mb-6">
-        <v-icon left>mdi-send-circle-outline</v-icon>submit data
+        <v-icon left>mdi-send-circle-outline</v-icon>upload data
       </v-btn>
     </div>
     <v-alert type="error" outlined v-if="error">
@@ -45,7 +45,7 @@
 
 <script>
 import uploadData from '@/utils/upload-data';
-import { setSubmitted, clearStorage } from '@/utils/local-storage';
+import { setSubmitted, setLatestCompletedStep } from '@/utils/local-storage';
 
 export default {
   name: 'Submit',
@@ -62,15 +62,20 @@ export default {
         this.overlay = true;
         await uploadData();
 
-        // Clear storage and
-        // save user's progress as "submitted"
-        // so that he/she can't repeat the experiment
-        clearStorage();
-        setSubmitted();
+        // Clear storage? Perhaps not just in case something goes wrong
+        // clearStorage();
 
         window.setTimeout(() => {
+          // Save user's progress as "submitted"
+          // so that he/she can't repeat the experiment
+          setSubmitted();
+
+          setLatestCompletedStep(null);
+
           // Redirect user to /thanks
-          this.$router.replace('/thanks');
+          this.$router.replace('/thanks').catch((err) => {
+            console.error(err);
+          });
         }, 1000);
       } catch (err) {
         this.error = true;
