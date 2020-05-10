@@ -32,7 +32,7 @@ const putObject = (body) => {
   const contentMD5 = crypto.createHash('md5').update(body).digest('base64');
 
   // We use the md5 checksum for the filename
-  const folder = process.NODE_ENV === 'production' ? 'data' : 'devData';
+  const folder = process.env.NODE_ENV === 'production' ? 'data' : 'devData';
   const key = `${folder}/${contentMD5}.json`;
 
   const params = {

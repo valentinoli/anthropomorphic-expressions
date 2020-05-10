@@ -10,7 +10,7 @@
     </v-overlay>
     <v-img
       :src="require('@/assets/wall-e.png')"
-      width="128"
+      width="96"
       class="wall-e d-none d-md-block"
     ></v-img>
     <v-row>
@@ -53,11 +53,9 @@
             individuals to participate.
           </p>
           <p>
-            You will watch <em>three</em> short videos of robots, each followed by a quick
+            You will watch <em>three</em> short video clips of robots, each followed by a quick
             questionnaire about your impression of the robot. It should only take about
-            <u>15-20 minutes</u> in total. Note that if you need to pause and resume later,
-            you can stop at any point in time and even safely close the page, so long
-            as you don't clear your browser's data.
+            <u>5-10 minutes</u> in total.
           </p>
           <p>
             At certain times during the experiment your face will be recorded,
@@ -123,7 +121,7 @@
               <v-btn
                 v-else
                 @click="requestWebcam"
-                color="yellow"
+                color="amber"
               >
                 <v-icon left>mdi-webcam</v-icon> authorize webcam
               </v-btn>
@@ -159,6 +157,7 @@ import { getSubmitted, setLatestCompletedStep } from '@/utils/local-storage';
 import Avatar from '@/components/Avatar.vue';
 import valentinSrc from '@/assets/valentin.jpg';
 import ahmadSrc from '@/assets/ahmad.jpg';
+import paulSrc from '@/assets/paul.jpg';
 
 export default {
   name: 'Home',
@@ -222,7 +221,7 @@ export default {
       email: 'valentin.loftsson@epfl.ch',
     },
     {
-      src: '',
+      src: paulSrc,
       name: 'Paul Griesser',
       role: 'Data Science, MSc',
       institution: 'EPFL',
@@ -247,7 +246,7 @@ export default {
 .wall-e {
   position: absolute;
   right: 0;
-  top: 15px;
+  top: 65px;
 }
 
 section p {

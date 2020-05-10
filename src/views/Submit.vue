@@ -76,7 +76,7 @@ export default {
           this.$router.replace('/thanks').catch((err) => {
             console.error(err);
           });
-        }, 1000);
+        }, 2000);
       } catch (err) {
         this.error = true;
         this.message = err;

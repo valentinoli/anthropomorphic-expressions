@@ -1,6 +1,15 @@
 <template>
   <div class="video-container">
     <div id="affdexElements"></div>
+    <v-slide-y-transition>
+      <v-alert
+        v-if="error"
+        type="error"
+        dense
+      >
+        {{ error }}
+      </v-alert>
+    </v-slide-y-transition>
     <video id="robotVideo">
       <source
         :src="`${
@@ -45,23 +54,18 @@ export default {
     return {
       overlay: true,
       loading: true,
+      error: false,
+      id: Number(this.$route.params.id),
+      playbackRange: playbackRanges[this.$route.path],
     };
   },
   mounted() {
     const videoEl = this.$el.querySelector('#robotVideo');
-    this.interplay = new WebcamDetectorAndVideoInterplay(videoEl);
+    this.interplay = new WebcamDetectorAndVideoInterplay(this, videoEl);
 
     videoEl.addEventListener('canplaythrough', this.onVideoCanplaythrough);
     videoEl.addEventListener('play', this.onVideoPlay);
     videoEl.addEventListener('pause', this.onVideoPause);
-  },
-  computed: {
-    id() {
-      return Number(this.$route.params.id);
-    },
-    playbackRange() {
-      return playbackRanges[this.$route.path];
-    },
   },
   methods: {
     onVideoCanplaythrough() {
@@ -114,6 +118,13 @@ export default {
         const nextPath = `/survey/${this.id}`;
         this.$router.replace(nextPath);
       }, 1000);
+    },
+    setError(error) {
+      // Function called in webcam-video-interplay
+      if (error || this.error) {
+        // error state is changing
+        this.error = error;
+      }
     },
   },
 };

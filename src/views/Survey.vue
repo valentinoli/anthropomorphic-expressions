@@ -31,30 +31,44 @@
           {{ form.title }}
         </p>
 
-        <v-row
-          v-for="item in form.items"
-          :key="item.name"
-        >
-          <div class="radio__label radio__lowLabel">{{ item.lowLabel }}</div>
-
-          <v-radio-group
-            v-model="item.value"
-            :name="item.name"
-            :id="item.name"
-            :rules="radioRules"
-            required
-            row
+        <div class="d-flex flex-column">
+          <div
+            v-for="item in form.items"
+            :key="item.name"
+            class="d-flex flex-column flex-sm-row align-center mb-12 mb-sm-0"
           >
-            <v-radio
-              v-for="n in 5"
-              :key="`${item.name}-${n}`"
-              :label="`${n}`"
-              :value="n"
-            ></v-radio>
-          </v-radio-group>
+            <div
+              :class="
+                $vuetify.breakpoint.smAndUp
+                ? 'radio-lowlabel-desktop'
+                : ''
+              "
+            >
+              {{ item.lowLabel }}
+            </div>
 
-          <div class="radio__label radio__highLabel">{{ item.highLabel }}</div>
-        </v-row>
+            <v-radio-group
+              v-model="item.value"
+              :name="item.name"
+              :id="item.name"
+              :rules="radioRules"
+              required
+              :row="$vuetify.breakpoint.smAndUp"
+              :column="$vuetify.breakpoint.xsOnly"
+            >
+              <v-radio
+                v-for="n in 5"
+                :key="`${item.name}-${n}`"
+                :label="`${n}`"
+                :value="n"
+              ></v-radio>
+            </v-radio-group>
+
+            <div>
+              {{ item.highLabel }}
+            </div>
+          </div>
+        </div>
 
         <v-row justify="center">
           <v-btn
@@ -84,6 +98,10 @@ export default {
       langs: Object.keys(survey),
       selectedLang: defaultLang,
       overlay: false,
+      radioRules: [
+        (v) => !!v || '',
+      ],
+      id: Number(this.$route.params.id),
     };
   },
   created() {
@@ -95,16 +113,6 @@ export default {
     this.indices = shuffle(indices);
 
     this.updateForm();
-  },
-  computed: {
-    id() {
-      return Number(this.$route.params.id);
-    },
-    radioRules() {
-      return [
-        (v) => !!v || '', // this.form.requiredMessage
-      ];
-    },
   },
   methods: {
     setLang(lang) {
@@ -170,18 +178,18 @@ export default {
   margin-right: 10px;
 }
 
-.radio__label {
-  margin-top: 20px;
+.v-form {
+  width: 100%;
 }
 
-.radio__lowLabel {
+.radio-lowlabel-desktop {
   text-align: right;
   margin-right: 16px;
   width: calc(50% - 150px);
 }
 
-.v-form {
-  width: 100%;
+.form__item {
+  width: 33%;
 }
 
 .btn-submit {

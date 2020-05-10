@@ -45,7 +45,7 @@
               <!-- Show alternative to the stepper on mobile  -->
               <template v-else>
                 <v-card class="mobile-step-card d-flex justify-center">
-                  <div class="headline font-weight-bold">{{ steps[currentStep][1] }}</div>
+                  <div class="headline font-weight-bold">{{ steps[currentStep - 1][1] }}</div>
                 </v-card>
               </template>
             </template>
@@ -67,7 +67,14 @@
 
     <v-footer app elevation="2" dark class="d-flex justify-center font-weight-light">
       <div>
-        <v-icon left>mdi-copyright</v-icon> 2020
+        <v-icon left>mdi-copyright</v-icon> 2020 -
+        <a
+          href="mailto:valentin.loftsson@epfl.ch,paul.griesser@epfl.ch"
+          target="_blank"
+          class="contact-link"
+        >
+          Contact
+        </a>
       </div>
     </v-footer>
   </v-app>
@@ -104,5 +111,14 @@ export default {
 
   .mobile-step-card {
     padding: 24px;
+  }
+
+  .contact-link {
+    color: white !important;
+    text-decoration: none;
+  }
+
+  .contact-link:hover {
+    text-decoration: underline;
   }
 </style>

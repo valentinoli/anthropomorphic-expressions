@@ -1,5 +1,7 @@
 
 export default class WebcamDetectorAndVideoInterplay {
+  vue;
+
   detector;
 
   video;
@@ -8,7 +10,9 @@ export default class WebcamDetectorAndVideoInterplay {
 
   timestamps = [];
 
-  constructor(videoEl) {
+  constructor(vue, videoEl) {
+    this.vue = vue;
+
     // SDK needs to create video and canvas nodes in the DOM in order to function
     // Here we are adding those nodes to a predefined div.
     const divRoot = document.getElementById('affdexElements');
@@ -79,9 +83,7 @@ export default class WebcamDetectorAndVideoInterplay {
   }
 
   onImageResultsSuccess(faces, image, timestamp) {
-    console.log(`Timestamp: ${timestamp}`);
-
-    if (faces.length > 0) {
+    if (faces.length === 1) {
       const {
         appearance,
         expressions,
@@ -98,6 +100,13 @@ export default class WebcamDetectorAndVideoInterplay {
 
       this.timestamps.push(timestamp);
       this.results.push(result);
+
+      this.vue.setError(false);
+    } else if (faces.length > 1) {
+      // Doesn't seem to occur, why?
+      this.vue.setError('Too many faces detected');
+    } else {
+      this.vue.setError('No face detected, please make sure your face can be seen');
     }
   }
 
