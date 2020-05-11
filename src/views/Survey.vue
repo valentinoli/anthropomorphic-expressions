@@ -1,13 +1,6 @@
 <template>
   <div class="survey font-weight-light">
-    <v-overlay
-      :value="overlay"
-    >
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
+    <Overlay :value="overlay"/>
 
     <v-row justify="center">
       <v-btn
@@ -85,6 +78,7 @@
 </template>
 
 <script>
+import Overlay from '@/components/Overlay.vue';
 import { setLatestCompletedStep, setItem, getRandomSequence } from '@/utils/local-storage';
 import survey from '@/utils/survey';
 import shuffle from 'lodash.shuffle';
@@ -93,6 +87,9 @@ const defaultLang = 'en';
 
 export default {
   name: 'Survey',
+  components: {
+    Overlay,
+  },
   data() {
     return {
       langs: Object.keys(survey),

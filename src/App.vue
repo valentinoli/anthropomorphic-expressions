@@ -100,6 +100,14 @@ export default {
 </script>
 
 <style>
+  section p {
+    text-align: justify;
+  }
+
+  section h2 {
+    margin-bottom: 4px;
+  }
+
   .view-container {
     min-height: 90vh;
   }

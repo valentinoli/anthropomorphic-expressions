@@ -1,6 +1,8 @@
 import putObject from './aws';
 import { getItem, setItem } from './local-storage';
 
+const stepError = new Error('Some step was not completed');
+
 export default async () => {
   const data = {
     video: {},
@@ -12,7 +14,7 @@ export default async () => {
   numbers.forEach((num) => {
     const item = getItem(`video_${num}`);
     if (!item) {
-      throw new Error('Some step was not completed');
+      throw stepError;
     }
     data.video[num] = JSON.parse(item);
   });
@@ -20,10 +22,17 @@ export default async () => {
   numbers.forEach((num) => {
     const item = getItem(`survey_${num}`);
     if (!item) {
-      throw new Error('Some step was not completed');
+      throw stepError;
     }
     data.survey[num] = JSON.parse(item);
   });
+
+  const generalInfo = getItem('general');
+  if (!generalInfo) {
+    throw stepError;
+  }
+
+  data.general = JSON.parse(generalInfo);
 
   const json = JSON.stringify(data);
 

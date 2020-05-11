@@ -84,12 +84,12 @@ export default class WebcamDetectorAndVideoInterplay {
       this.timestamps.push(timestamp);
       this.results.push(result);
 
-      this.vue.setError(false);
+      this.vue.setWarning(false);
     } else if (faces.length > 1) {
       // Doesn't seem to occur, why?
-      this.vue.setError('Too many faces detected');
+      this.vue.setWarning('Too many faces detected');
     } else {
-      this.vue.setError('No face detected, please make sure your face can be seen');
+      this.vue.setWarning('No face detected, please make sure your face is visible');
     }
   }
 

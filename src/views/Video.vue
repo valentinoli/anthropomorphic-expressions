@@ -3,11 +3,11 @@
     <div id="affdexElements"></div>
     <v-slide-y-transition>
       <v-alert
-        v-if="error"
-        type="error"
+        v-if="warning"
+        type="warning"
         dense
       >
-        {{ error }}
+        {{ warning }}
       </v-alert>
     </v-slide-y-transition>
     <video id="robotVideo">
@@ -26,7 +26,7 @@
       opacity=0.7
     >
       <template v-if="loading">
-        <div class="mb-3">
+        <div v-if="startingDetector" class="mb-3">
           This might take a few seconds
         </div>
         <v-progress-circular
@@ -36,8 +36,8 @@
         </v-progress-circular>
       </template>
       <template v-else>
-        <div class="mb-3">
-          Please make sure the audio volume is on before continuing
+        <div v-if="idParam === 1" class="mb-3">
+          Please make sure the audio is on before continuing
         </div>
         <v-btn
           @click="onPlayButtonClick"
@@ -64,7 +64,8 @@ export default {
     return {
       overlay: true,
       loading: true,
-      error: false,
+      warning: false,
+      startingDetector: false,
       idParam: Number(this.$route.params.id),
     };
   },
@@ -103,12 +104,14 @@ export default {
       // --> start detector and show loading state
       this.interplay.startDetector();
       this.loading = true;
+      this.startingDetector = true;
     },
     onVideoPlay() {
       // Video starts playing after detector has started
       // (see interplay class onInitializeSuccess method)
       // --> hide overlay
       this.overlay = false;
+      this.startingDetector = false;
     },
     onVideoPause() {
       // Video doesn't necessarily stop at the end
@@ -139,11 +142,11 @@ export default {
         this.$router.replace(nextPath);
       }, 500);
     },
-    setError(error) {
+    setWarning(warning) {
       // Function called in webcam-video-interplay
-      if (error || this.error) {
-        // error state is changing
-        this.error = error;
+      if (warning || this.warning) {
+        // warning state is changing
+        this.warning = warning;
       }
     },
   },

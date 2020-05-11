@@ -14,6 +14,11 @@ const routes = [
     component: () => import('../views/Home.vue'),
   },
   {
+    path: '/general',
+    name: 'General',
+    component: () => import('../views/General.vue'),
+  },
+  {
     path: '/survey/:id([1-3])',
     name: 'Survey',
     component: () => import('../views/Survey.vue'),
@@ -43,6 +48,7 @@ const routes = [
 const router = new VueRouter({
   routes,
   scrollBehavior() {
+    // Scroll to top
     return { x: 0, y: 0 };
   },
 });
@@ -56,9 +62,10 @@ router.beforeEach((to, from, next) => {
     return next();
   }
 
-  if (!latestCompletedStep && to.path === '/') {
-    // User allowed to navigate to index,
-    // but not during participation
+  if ((!latestCompletedStep || latestCompletedStep === '/')
+      && (to.path === '/' || to.path === '/general')) {
+    // User allowed to navigate to index and /general,
+    // but not during the experiment
     return next();
   }
 

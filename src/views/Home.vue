@@ -1,13 +1,6 @@
 <template>
   <div class="home">
-    <v-overlay
-      :value="overlay"
-    >
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
+    <Overlay :value="overlay"/>
     <v-img
       :src="require('@/assets/wall-e.png')"
       width="96"
@@ -52,17 +45,17 @@
           <p>
             You will watch <em>three</em> short video clips of robots in a random order,
             each followed by a quick questionnaire about your impression of the robot.
-            It should only take about <u>5-10 minutes</u> in total.
             As the videos come with sound, please remember to
             <strong>turn your audio volume on</strong>.
+            The overall process should only take about <u>5-10 minutes</u>.
           </p>
           <p>
-            At certain times during the experiment your face will be recorded,
+            Your face will be recorded at certain times during the experiment,
             so we ask you to enable and authorize access to your web camera, if you have one.
             Please make sure that your face, and only yours, is visible to the camera.
-            Note that <strong>we will not save a video recording</strong> since
-            the frames will be processed in real-time and <strong>no personal or
-            traceable data will be stored</strong>. Your participation is <strong>completely
+            Note that <strong>we will not save any video recordings</strong> since
+            the frames are processed in real-time. <strong>No personal or
+            traceable data will be stored</strong> either. Your participation is <strong>completely
             anonymous</strong>.
           </p>
 
@@ -89,43 +82,14 @@
           </v-alert>
 
           <!-- Else allow participation -->
-          <div v-else>
-            <!-- Web camera authorized -->
-            <template v-if="webcamAuthorized">
-              <v-alert
-                type="success"
-                width="300"
-              >
-                Camera access authorized
-              </v-alert>
-
-              <v-btn
-                @click="start"
-                color="info"
-              >
-                <v-icon left>mdi-robot</v-icon> start
-              </v-btn>
-            </template>
-
-            <!-- Web camera not authorized access yet -->
-            <template v-else>
-              <v-alert
-                v-if="webcamDenied"
-                type="warning"
-                width="300"
-              >
-                Camera permission denied
-              </v-alert>
-
-              <v-btn
-                v-else
-                @click="requestWebcam"
-                color="amber"
-              >
-                <v-icon left>mdi-webcam</v-icon> authorize webcam
-              </v-btn>
-            </template>
-          </div>
+          <template v-else>
+            <v-btn
+              @click="start"
+              color="info"
+            >
+              <v-icon left>mdi-robot</v-icon> start
+            </v-btn>
+          </template>
 
           <h2 class="mt-4">Who are we?</h2>
           <p>
@@ -152,9 +116,9 @@
 </template>
 
 <script>
-import { getSubmitted, setLatestCompletedStep, setRandomSequence } from '@/utils/local-storage';
+import { setLatestCompletedStep, getSubmitted } from '@/utils/local-storage';
 import Avatar from '@/components/Avatar.vue';
-import shuffle from 'lodash.shuffle';
+import Overlay from '@/components/Overlay.vue';
 import valentinSrc from '@/assets/valentin.jpg';
 import ahmadSrc from '@/assets/ahmad.jpg';
 import paulSrc from '@/assets/paul.jpg';
@@ -163,11 +127,10 @@ export default {
   name: 'Home',
   components: {
     Avatar,
+    Overlay,
   },
   data() {
     return {
-      webcamAuthorized: false,
-      webcamDenied: false,
       overlay: false,
     };
   },
@@ -182,38 +145,16 @@ export default {
     }
   },
   methods: {
-    requestWebcam() {
-      window.navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-      }).then((stream) => {
-        this.webcamAuthorized = true;
-        if (stream) {
-          stream.getTracks().forEach((track) => {
-            track.stop();
-          });
-        }
-      }).catch((err) => {
-        // Permission denied?
-        this.webcamDenied = true;
-        console.error(err);
-      });
-    },
     start() {
       // Show loading state
       this.overlay = true;
       window.setTimeout(() => {
-        // Set a random sequence for the three video/survey pairs
-        // and save in local storage. This is to avoid response bias such that
-        // people would answer to meet the expectation of the research.
-        setRandomSequence(shuffle([1, 2, 3]));
-
         // Set latest completed step as '/'
         setLatestCompletedStep(this.$route.path);
 
-        // Redirect user to first video
-        this.$router.replace('/video/1');
-      }, 3000);
+        // Redirect user to /general
+        this.$router.replace('/general');
+      }, 1000);
     },
     getSubmitted,
   },
@@ -252,13 +193,5 @@ export default {
   position: absolute;
   right: 0;
   top: 65px;
-}
-
-section p {
-  text-align: justify;
-}
-
-section h2 {
-  margin-bottom: 4px;
 }
 </style>

@@ -1,5 +1,6 @@
 export default {
   '/': 'Introduction',
+  '/general': 'General',
   '/video/1': 'Video 1',
   '/survey/1': 'Survey 1',
   '/video/2': 'Video 2',
