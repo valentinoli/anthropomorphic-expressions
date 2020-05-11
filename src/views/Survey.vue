@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
+import { setLatestCompletedStep, setItem, getRandomSequence } from '@/utils/local-storage';
 import survey from '@/utils/survey';
 import shuffle from 'lodash.shuffle';
 
@@ -101,8 +101,17 @@ export default {
       radioRules: [
         (v) => !!v || '',
       ],
-      id: Number(this.$route.params.id),
+      idParam: Number(this.$route.params.id),
     };
+  },
+  computed: {
+    randomSequenceId() {
+      // get random sequence from local storage
+      // and find the current random id
+      const randomSequence = getRandomSequence();
+      const index = this.idParam - 1;
+      return randomSequence[index];
+    },
   },
   created() {
     // Shuffle survey item indices beforehand to keep
@@ -124,20 +133,20 @@ export default {
 
       if (formValid) {
         this.overlay = true;
-        const { path } = this.$route;
 
         // v-model directive on the radio button groups took care of
         // updating the values in this.form.items
         const submission = this.form.items.map(({ name, value }) => ({ name, value }));
-        setItem(path, JSON.stringify(submission));
+        const dataKey = `survey_${this.randomSequenceId}`;
+        setItem(dataKey, JSON.stringify(submission));
 
         window.setTimeout(() => {
           // Set the latest completed step of the current participant
           // and save it in browser's local storage
-          setLatestCompletedStep(path);
+          setLatestCompletedStep(this.$route.path);
 
           // Redirect user to next video/submission when data has been saved
-          const nextPath = this.id === 3 ? '/submit' : `/video/${this.id + 1}`;
+          const nextPath = this.idParam === 3 ? '/submit' : `/video/${this.idParam + 1}`;
           this.$router.replace(nextPath);
         }, 1000);
       } else {

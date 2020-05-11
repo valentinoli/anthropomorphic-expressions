@@ -7,6 +7,9 @@ const getLatestCompletedStep = () => getItem('latestCompletedStep');
 const setSubmitted = () => setItem('submitted', true);
 const getSubmitted = () => getItem('submitted');
 
+const setRandomSequence = (sequence) => setItem('randomSequence', JSON.stringify(sequence));
+const getRandomSequence = () => JSON.parse(getItem('randomSequence'));
+
 const clearStorage = () => window.localStorage.clear();
 
 export {
@@ -16,5 +19,7 @@ export {
   getLatestCompletedStep,
   setSubmitted,
   getSubmitted,
+  setRandomSequence,
+  getRandomSequence,
   clearStorage,
 };

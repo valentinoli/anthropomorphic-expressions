@@ -8,6 +8,3 @@ export default {
   '/survey/3': 'Survey 3',
   '/submit': 'Submit',
 };
-
-export const videos = ['/video/1', '/video/2', '/video/3'];
-export const surveys = ['/survey/1', '/survey/2', '/survey/3'];

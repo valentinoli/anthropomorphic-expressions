@@ -23,9 +23,6 @@
             Predicting Anthropomorphic Attitudes Towards Robots<br>
             based on Physical Facial Expressions and Attributes
           </div>
-          <div class="title mb-4 font-weight-thin text-left">
-            A Study in Experimental Cognitive Psychology, EPFL 2020
-          </div>
           <p>
             Welcome dear visitor
           </p>
@@ -53,9 +50,11 @@
             individuals to participate.
           </p>
           <p>
-            You will watch <em>three</em> short video clips of robots, each followed by a quick
-            questionnaire about your impression of the robot. It should only take about
-            <u>5-10 minutes</u> in total.
+            You will watch <em>three</em> short video clips of robots in a random order,
+            each followed by a quick questionnaire about your impression of the robot.
+            It should only take about <u>5-10 minutes</u> in total.
+            As the videos come with sound, please remember to
+            <strong>turn your audio volume on</strong>.
           </p>
           <p>
             At certain times during the experiment your face will be recorded,
@@ -153,8 +152,9 @@
 </template>
 
 <script>
-import { getSubmitted, setLatestCompletedStep } from '@/utils/local-storage';
+import { getSubmitted, setLatestCompletedStep, setRandomSequence } from '@/utils/local-storage';
 import Avatar from '@/components/Avatar.vue';
+import shuffle from 'lodash.shuffle';
 import valentinSrc from '@/assets/valentin.jpg';
 import ahmadSrc from '@/assets/ahmad.jpg';
 import paulSrc from '@/assets/paul.jpg';
@@ -203,6 +203,11 @@ export default {
       // Show loading state
       this.overlay = true;
       window.setTimeout(() => {
+        // Set a random sequence for the three video/survey pairs
+        // and save in local storage. This is to avoid response bias such that
+        // people would answer to meet the expectation of the research.
+        setRandomSequence(shuffle([1, 2, 3]));
+
         // Set latest completed step as '/'
         setLatestCompletedStep(this.$route.path);
 

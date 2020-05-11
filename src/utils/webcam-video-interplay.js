@@ -65,23 +65,6 @@ export default class WebcamDetectorAndVideoInterplay {
     };
   }
 
-  onInitializeSuccess() {
-    console.log('The detector reports initialized');
-
-    // Play video when detector has been initialized
-    // Should start almost immediately predicting expression values
-    // Triggers HTMLMediaElement: play event (see handling in the Vue Video component)
-    const promise = this.video.play();
-    if (promise) {
-      // undefined in IE
-      promise
-        .then(() => {
-          console.log('Video started playing');
-        })
-        .catch(console.error);
-    }
-  }
-
   onImageResultsSuccess(faces, image, timestamp) {
     if (faces.length === 1) {
       const {
@@ -107,6 +90,23 @@ export default class WebcamDetectorAndVideoInterplay {
       this.vue.setError('Too many faces detected');
     } else {
       this.vue.setError('No face detected, please make sure your face can be seen');
+    }
+  }
+
+  onInitializeSuccess() {
+    console.log('The detector reports initialized');
+
+    // Play video when detector has been initialized
+    // Should start almost immediately predicting expression values
+    // Triggers HTMLMediaElement: play event (see handling in the Vue Video component)
+    const promise = this.video.play();
+    if (promise) {
+      // undefined in IE
+      promise
+        .then(() => {
+          console.log('Video started playing');
+        })
+        .catch(console.error);
     }
   }
 

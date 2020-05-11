@@ -13,7 +13,7 @@
     <video id="robotVideo">
       <source
         :src="`${
-          require(`@/assets/video/video${id}.mp4`)
+          require(`@/assets/video/video${randomSequenceId}.mp4`)
         }#t=${playbackRange}`"
         type="video/mp4">
       <p>
@@ -23,28 +23,38 @@
     <v-overlay
       :value="overlay"
       absolute
+      opacity=0.7
     >
-      <v-progress-circular
-        v-if="loading"
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-      <v-btn
-        v-else
-        @click="onPlayButtonClick"
-        fab
-        light
-        x-large
-      >
-        <v-icon>mdi-play</v-icon>
-      </v-btn>
+      <template v-if="loading">
+        <div class="mb-3">
+          This might take a few seconds
+        </div>
+        <v-progress-circular
+          indeterminate
+          size="64"
+        >
+        </v-progress-circular>
+      </template>
+      <template v-else>
+        <div class="mb-3">
+          Please make sure the audio volume is on before continuing
+        </div>
+        <v-btn
+          @click="onPlayButtonClick"
+          fab
+          light
+          large
+        >
+          <v-icon>mdi-play</v-icon>
+        </v-btn>
+      </template>
     </v-overlay>
   </div>
 </template>
 
 <script>
 import WebcamDetectorAndVideoInterplay from '@/utils/webcam-video-interplay';
-import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
+import { setLatestCompletedStep, setItem, getRandomSequence } from '@/utils/local-storage';
 import playbackRanges from '@/utils/playback-range';
 import processResults from '@/utils/process-affdex-predictions';
 
@@ -55,9 +65,20 @@ export default {
       overlay: true,
       loading: true,
       error: false,
-      id: Number(this.$route.params.id),
-      playbackRange: playbackRanges[this.$route.path],
+      idParam: Number(this.$route.params.id),
     };
+  },
+  computed: {
+    randomSequenceId() {
+      // get random sequence from local storage
+      // and find the current random id
+      const randomSequence = getRandomSequence();
+      const index = this.idParam - 1;
+      return randomSequence[index];
+    },
+    playbackRange() {
+      return playbackRanges[this.randomSequenceId - 1];
+    },
   },
   mounted() {
     const videoEl = this.$el.querySelector('#robotVideo');
@@ -75,7 +96,7 @@ export default {
       // Display play button after a short timeout
       window.setTimeout(() => {
         this.loading = false;
-      }, 1000);
+      }, 500);
     },
     onPlayButtonClick() {
       // User clicks play button
@@ -101,23 +122,22 @@ export default {
       this.interplay.stopDetector();
       this.overlay = true;
 
-      const { path } = this.$route;
-
       // Process the predictions and save data in local storage
       const { timestamps, results } = this.interplay.data;
       const processedResults = processResults(results);
       const data = { timestamps, data: processedResults };
-      setItem(path, JSON.stringify(data));
+      const dataKey = `video_${this.randomSequenceId}`;
+      setItem(dataKey, JSON.stringify(data));
 
       window.setTimeout(() => {
         // Set the latest completed step of the current participant
         // and save it in browser's local storage
-        setLatestCompletedStep(path);
+        setLatestCompletedStep(this.$route.path);
 
         // Redirect user to the survey when data has been saved
-        const nextPath = `/survey/${this.id}`;
+        const nextPath = `/survey/${this.idParam}`;
         this.$router.replace(nextPath);
-      }, 1000);
+      }, 500);
     },
     setError(error) {
       // Function called in webcam-video-interplay
@@ -141,4 +161,12 @@ export default {
     object-fit: contain;
     margin-bottom: -6px;
   }
+</style>
+
+<style>
+.v-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>

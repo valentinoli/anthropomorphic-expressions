@@ -72,6 +72,8 @@ export default {
 
           setLatestCompletedStep(null);
 
+          console.info('Data uploaded successfully');
+
           // Redirect user to /thanks
           this.$router.replace('/thanks').catch((err) => {
             console.error(err);
