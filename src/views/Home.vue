@@ -62,7 +62,7 @@
           <!-- Browser does not support required APIs -->
           <v-alert
             v-if="unsupportiveBrowser"
-            type="error"
+            type="warning"
             outlined
           >
             <strong>You must use a different browser to participate.</strong>
@@ -74,7 +74,7 @@
           <!-- Insecure context -->
           <v-alert
             v-else-if="!secureContext"
-            type="error"
+            type="warning"
             outlined
           >
             <strong>You must be viewing this page in a secure context.</strong>
