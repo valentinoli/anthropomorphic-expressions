@@ -59,27 +59,27 @@
             anonymous</strong>.
           </p>
 
-          <!-- Browser does not support required APIs -->
+          <!-- Insecure context checked first -->
           <v-alert
-            v-if="unsupportiveBrowser"
-            type="warning"
-            outlined
-          >
-            <strong>You must use a different browser to participate.</strong>
-            <div>
-              Your browser does not support the APIs this site requires
-            </div>
-          </v-alert>
-
-          <!-- Insecure context -->
-          <v-alert
-            v-else-if="!secureContext"
+            v-if="!secureContext"
             type="warning"
             outlined
           >
             <strong>You must be viewing this page in a secure context.</strong>
             <div>
               <a :href="`https://${host}`">Open in secure context</a>
+            </div>
+          </v-alert>
+
+          <!-- Browser does not support required APIs -->
+          <v-alert
+            v-else-if="unsupportiveBrowser"
+            type="warning"
+            outlined
+          >
+            <strong>You must use a different browser to participate.</strong>
+            <div>
+              Your browser does not support the APIs this site requires
             </div>
           </v-alert>
 
