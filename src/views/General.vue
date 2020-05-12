@@ -44,8 +44,8 @@
           label="Age"
           :rules="[
             (v) => !!v || 'Age is required',
-            (v) => v >= 18 || 'Minimum age is 18',
-            (v) => v <= 130 || 'Are you really that old?',
+            (v) => v >= 17 || 'Minimum age is 17',
+            (v) => v <= 80 || 'Maximum age is 80',
           ]"
           required
           outlined

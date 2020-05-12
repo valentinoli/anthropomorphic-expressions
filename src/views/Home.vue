@@ -95,6 +95,12 @@
 
           <!-- Else allow participation -->
           <template v-else>
+            <p>
+              <em>
+                By clicking the start button you declare that you understand
+                and acknowledge the terms of the study
+              </em>
+            </p>
             <v-btn
               @click="start"
               color="info"
