@@ -63,8 +63,8 @@ router.beforeEach((to, from, next) => {
   }
 
   if ((!latestCompletedStep || latestCompletedStep === '/')
-      && (to.path === '/' || to.path === '/general')) {
-    // User allowed to navigate to index and /general,
+      && to.path === '/') {
+    // User allowed to navigate to index,
     // but not during the experiment
     return next();
   }
