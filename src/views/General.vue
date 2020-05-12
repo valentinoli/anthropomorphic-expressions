@@ -173,12 +173,12 @@ export default {
         // people would answer to meet the expectation of the research.
         setRandomSequence(shuffle([1, 2, 3]));
 
-        // Set latest completed step as '/'
+        // Set latest completed step as '/general'
         setLatestCompletedStep(this.$route.path);
 
         // Redirect user to first video
         this.$router.replace('/video/1');
-      }, 3000);
+      }, 1500);
     },
   },
 };

@@ -141,7 +141,7 @@ export default {
         // Redirect user to the survey when data has been saved
         const nextPath = `/survey/${this.idParam}`;
         this.$router.replace(nextPath);
-      }, 500);
+      }, 1000);
     },
     setWarning(warning) {
       // Function called in webcam-video-interplay

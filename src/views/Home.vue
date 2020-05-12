@@ -165,7 +165,7 @@ export default {
 
         // Redirect user to /general
         this.$router.replace('/general');
-      }, 1000);
+      }, 500);
     },
     getSubmitted,
   },
