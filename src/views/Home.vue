@@ -71,6 +71,18 @@
             </div>
           </v-alert>
 
+          <!-- Insecure context -->
+          <v-alert
+            v-else-if="!secureContext"
+            type="error"
+            outlined
+          >
+            <strong>You must be viewing this page in a secure context.</strong>
+            <div>
+              <a :href="`https://${host}`">Open in secure context</a>
+            </div>
+          </v-alert>
+
           <!-- User already submitted on the current browser
                according to local storage parameter -->
           <v-alert
@@ -131,18 +143,17 @@ export default {
   },
   data() {
     return {
+      host: window.location.host,
       overlay: false,
     };
   },
   created() {
+    this.secureContext = process.env.NODE_ENV === 'development' || window.location.protocol.includes('https');
     this.unsupportiveBrowser = (
       !window.navigator.mediaDevices
       || !window.navigator.mediaDevices.getUserMedia
       || !window.localStorage
     );
-    if (this.unsupportiveBrowser) {
-      console.info('Browser unsupported');
-    }
   },
   methods: {
     start() {
