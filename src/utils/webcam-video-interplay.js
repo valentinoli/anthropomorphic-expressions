@@ -65,24 +65,24 @@ export default class WebcamDetectorAndVideoInterplay {
     };
   }
 
-  onImageResultsSuccess(faces, image, timestamp) {
+  onImageResultsSuccess(faces) {
     if (faces.length === 1) {
       const {
         appearance,
         expressions,
         emotions,
         emojis,
+        measurements,
       } = faces[0];
 
-      const result = {
+      this.timestamps.push(this.video.currentTime);
+      this.results.push({
         appearance,
         expressions,
         emotions,
         emojis,
-      };
-
-      this.timestamps.push(timestamp);
-      this.results.push(result);
+        measurements,
+      });
 
       this.vue.setWarning(false);
     } else if (faces.length > 1) {

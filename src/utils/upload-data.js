@@ -1,7 +1,7 @@
 import putObject from './aws';
-import { getItem, setItem } from './local-storage';
+import { getItem, setItem, getRandomSequence } from './local-storage';
 
-const stepError = new Error('Some step was not completed');
+const stepError = (step) => new Error(`Step ${step} incomplete. Random sequence: ${getRandomSequence()}`);
 
 export default async () => {
   const data = {
@@ -12,24 +12,27 @@ export default async () => {
   const numbers = [1, 2, 3];
 
   numbers.forEach((num) => {
-    const item = getItem(`video_${num}`);
+    const key = `video_${num}`;
+    const item = getItem(key);
     if (!item) {
-      throw stepError;
+      throw stepError(key);
     }
     data.video[num] = JSON.parse(item);
   });
 
   numbers.forEach((num) => {
-    const item = getItem(`survey_${num}`);
+    const key = `survey_${num}`;
+    const item = getItem(key);
     if (!item) {
-      throw stepError;
+      throw stepError(key);
     }
     data.survey[num] = JSON.parse(item);
   });
 
-  const generalInfo = getItem('general');
+  const key = 'general';
+  const generalInfo = getItem(key);
   if (!generalInfo) {
-    throw stepError;
+    throw stepError(key);
   }
 
   data.general = JSON.parse(generalInfo);
