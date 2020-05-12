@@ -23,6 +23,7 @@
       <v-alert
         type="success"
         width="300"
+        outlined
       >
         Camera access authorized
       </v-alert>
@@ -88,6 +89,7 @@
         v-if="webcamDenied"
         type="warning"
         width="300"
+        outlined
       >
         Camera permission denied
       </v-alert>
@@ -106,7 +108,7 @@
       </p>
       <v-btn
         @click="requestWebcam"
-        outlined
+        dark
       >
         <v-icon left>mdi-webcam</v-icon> authorize camera access
       </v-btn>

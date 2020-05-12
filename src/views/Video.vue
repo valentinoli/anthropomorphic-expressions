@@ -5,6 +5,7 @@
       <v-alert
         v-if="warning"
         type="warning"
+        outlined
         dense
       >
         {{ warning }}

@@ -129,4 +129,8 @@ export default {
   .contact-link:hover {
     text-decoration: underline;
   }
+
+  .v-footer {
+    z-index: 10 !important;
+  }
 </style>

@@ -65,7 +65,7 @@
             type="warning"
             outlined
           >
-            <strong>You must be viewing this page in a secure context.</strong>
+            <strong>You must be viewing this page in a secure context to participate.</strong>
             <div>
               <a :href="`https://${host}`">Open in secure context</a>
             </div>
