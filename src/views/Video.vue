@@ -5,7 +5,6 @@
       <v-alert
         v-if="warning"
         type="warning"
-        outlined
         dense
       >
         {{ warning }}
@@ -27,7 +26,7 @@
       opacity=0.7
     >
       <template v-if="loading">
-        <div v-if="startingDetector" class="mb-3">
+        <div class="mb-3">
           This might take a few seconds
         </div>
         <v-progress-circular
@@ -37,8 +36,8 @@
         </v-progress-circular>
       </template>
       <template v-else>
-        <div v-if="idParam === 1" class="mb-3">
-          Please make sure the audio is on before continuing
+        <div class="mb-3">
+          Please make sure your audio is on
         </div>
         <v-btn
           @click="onPlayButtonClick"
@@ -66,7 +65,6 @@ export default {
       overlay: true,
       loading: true,
       warning: false,
-      startingDetector: false,
       idParam: Number(this.$route.params.id),
     };
   },
@@ -105,14 +103,12 @@ export default {
       // --> start detector and show loading state
       this.interplay.startDetector();
       this.loading = true;
-      this.startingDetector = true;
     },
     onVideoPlay() {
       // Video starts playing after detector has started
       // (see interplay class onInitializeSuccess method)
       // --> hide overlay
       this.overlay = false;
-      this.startingDetector = false;
     },
     onVideoPause() {
       // Video doesn't necessarily stop at the end
