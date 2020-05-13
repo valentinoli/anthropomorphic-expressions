@@ -46,7 +46,8 @@
             You will watch <em>three</em> short video clips of robots in a random order,
             each followed by a quick questionnaire about your impression of the robot.
             As the videos come with sound, please remember to
-            <strong>turn your audio volume on</strong>.
+            <strong>turn your audio volume on</strong>. During the experiment it
+            is suggested that you have a good internet connection.
             The overall process should only take about <u>5-10 minutes</u>.
           </p>
           <p>
@@ -63,7 +64,6 @@
           <v-alert
             v-if="!secureContext"
             type="warning"
-            outlined
           >
             <strong>You must be viewing this page in a secure context to participate.</strong>
             <div>
@@ -71,11 +71,21 @@
             </div>
           </v-alert>
 
+          <!-- User can't authorize web cam in Facebook in-app browser or Instagram -->
+          <v-alert
+            v-else-if="isFacebookAppBrowser"
+            type="warning"
+          >
+            <strong>This app does not support the Facebook in-app browser</strong>
+            <div>
+              To participate, you must open the app in another browser. We recommend Chrome.
+            </div>
+          </v-alert>
+
           <!-- Browser does not support required APIs -->
           <v-alert
             v-else-if="unsupportiveBrowser"
             type="warning"
-            outlined
           >
             <strong>You must use a different browser to participate.</strong>
             <div>
@@ -160,6 +170,8 @@ export default {
       || !window.navigator.mediaDevices.getUserMedia
       || !window.localStorage
     );
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    this.isFacebookAppBrowser = (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1) || (ua.indexOf('Instagram') > -1);
   },
   methods: {
     start() {

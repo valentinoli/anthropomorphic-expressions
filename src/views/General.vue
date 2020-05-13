@@ -10,6 +10,16 @@
         As a reminder, please <strong>turn your audio volume on</strong>.
       </p>
 
+      <p>
+        Note that if you need to pause and resume later,
+        you can stop at any point in time and even safely close the page, just
+        as long as you don't clear you browser's data in the meantime.
+      </p>
+
+      <p>
+        Before continuing, make sure you have a fairly good internet connection.
+      </p>
+
       <v-btn
         @click="nextStep"
         color="info"
