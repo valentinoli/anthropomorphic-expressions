@@ -64,6 +64,7 @@
           <v-alert
             v-if="!secureContext"
             type="warning"
+            outlined
           >
             <strong>You must be viewing this page in a secure context to participate.</strong>
             <div>
@@ -75,6 +76,7 @@
           <v-alert
             v-else-if="isFacebookAppBrowser"
             type="warning"
+            outlined
           >
             <strong>This app does not support the Facebook in-app browser</strong>
             <div>
@@ -86,6 +88,7 @@
           <v-alert
             v-else-if="unsupportiveBrowser"
             type="warning"
+            outlined
           >
             <strong>You must use a different browser to participate.</strong>
             <div>
