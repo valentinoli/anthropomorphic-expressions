@@ -1,5 +1,6 @@
 <template>
   <section>
+    <div id="affdexElements"></div>
     <Overlay :value="overlay"/>
 
     <!-- Form submitted  -->
@@ -8,6 +9,7 @@
         You will now watch three short video clips of robots in a random order,
         each followed by a quick questionnaire about your impression of the robot.
         As a reminder, please <strong>turn your audio volume on</strong>.
+        The survey is available in four languages, English, French, German, and Spanish.
       </p>
 
       <p>
@@ -16,28 +18,16 @@
         as long as you don't clear you browser's data in the meantime.
       </p>
 
-      <p>
-        Before continuing, make sure you have a fairly good internet connection.
-      </p>
-
       <v-btn
         @click="nextStep"
-        color="info"
+        color="primary"
       >
         <v-icon left>mdi-robot</v-icon> continue
       </v-btn>
     </template>
 
-    <!-- Web camera authorized, show form -->
-    <template v-else-if="webcamAuthorized">
-      <v-alert
-        type="success"
-        width="300"
-        outlined
-      >
-        Camera access authorized
-      </v-alert>
-
+    <!-- Web camera authorized and face detected -> show form -->
+    <template v-else-if="faceDetectionConfirmed">
       <div class="mb-4">
         Before continuing, please provide the following information
       </div>
@@ -85,7 +75,7 @@
 
         <v-btn
           class="mt-6"
-          color="info"
+          color="primary"
           @click="submitForm"
         >
           <v-icon left>mdi-send-circle-outline</v-icon> submit
@@ -93,20 +83,81 @@
       </v-form>
     </template>
 
+    <template v-else-if="testedFaceDetection">
+      <template v-if="faceDetected">
+        <v-alert
+          type="success"
+          :width="alertWidth"
+          outlined
+        >
+          Camera test successful
+        </v-alert>
+
+        <v-btn color="primary" @click="faceDetectionConfirmed = true">
+          <v-icon left>mdi-robot</v-icon> continue
+        </v-btn>
+      </template>
+      <template v-else>
+        <v-alert
+          type="error"
+          :width="alertWidth"
+          outlined
+        >
+          <strong>Camera test failed</strong>
+          <div>
+            Please make sure your face is always visible to the front camera
+          </div>
+        </v-alert>
+
+        <v-btn
+          @click="testCameraDetector"
+          color="primary"
+          dark
+        >
+          <v-icon left>mdi-camera-front</v-icon> retry
+        </v-btn>
+      </template>
+    </template>
+
+    <template v-else-if="webcamAuthorized">
+      <v-alert
+        type="success"
+        :width="alertWidth"
+        outlined
+      >
+        Camera access authorized
+      </v-alert>
+
+      <p>
+        Please press the button to test the camera
+      </p>
+
+      <v-btn
+        @click="testCameraDetector"
+        color="primary"
+        dark
+      >
+        <v-icon left>mdi-camera-front</v-icon> test camera
+      </v-btn>
+    </template>
+
     <!-- Web camera not authorized -->
     <template v-else-if="webcamDenied">
       <v-alert
         v-if="webcamDenied"
-        type="warning"
-        width="300"
+        type="error"
+        :width="alertWidth"
         outlined
       >
-        Camera permission denied
+        Camera authorization denied or failed
       </v-alert>
     </template>
 
-    <!-- Web camera authorization request not sent yet -->
+    <!-- First thing the user sees -->
     <template v-else>
+      <p>
+        Before continuing, please make sure you have a good internet connection.
+      </p>
       <p>
         Your face will be recorded at certain times during the experiment,
         so we ask you to enable and authorize access to your web camera, if you have one.
@@ -118,6 +169,7 @@
       </p>
       <v-btn
         @click="requestWebcam"
+        color="primary"
         dark
       >
         <v-icon left>mdi-webcam</v-icon> authorize camera access
@@ -140,10 +192,14 @@ export default {
     return {
       webcamAuthorized: false,
       webcamDenied: false,
+      testedFaceDetection: false,
+      faceDetectionConfirmed: false,
+      faceDetected: false,
       formSubmitted: false,
       overlay: false,
       gender: null,
       age: null,
+      alertWidth: 'max-content',
     };
   },
   methods: {
@@ -163,6 +219,58 @@ export default {
         this.webcamDenied = true;
         console.error(err);
       });
+    },
+    testCameraDetector() {
+      this.overlay = true;
+      let attempts = 0;
+      let successes = 0;
+
+      // See proper documentation of below code in webcam-video-interplay.js
+      const divRoot = document.getElementById('affdexElements');
+      const width = 640;
+      const height = 480;
+      const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
+
+      const detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
+
+      detector.detectAllEmotions();
+      detector.detectAllExpressions();
+      detector.detectAllEmojis();
+      detector.detectAllAppearance();
+
+      detector.addEventListener('onInitializeSuccess', () => console.info('The detector reports initialized'));
+      detector.addEventListener('onInitializeFailure', (err) => console.error(err));
+      detector.addEventListener('onStopSuccess', () => {
+        console.info('The detector reports stopped');
+        const successRate = successes / attempts;
+        if (successRate > 0.95) {
+          this.faceDetected = true;
+        } else {
+          this.faceDetected = false;
+          console.info(`${Math.round(successRate * 100)}% face detection success rate`);
+        }
+
+        this.testedFaceDetection = true;
+        this.overlay = false;
+      });
+
+      detector.addEventListener('onImageResultsSuccess', (faces) => {
+        const success = faces.length === 1;
+        attempts += 1;
+        if (success) {
+          console.info('Face detected');
+          successes += 1;
+        } else {
+          console.warn('Face not detected');
+        }
+
+        if (attempts > 30) {
+          detector.removeEventListener('onImageResultsSuccess');
+          detector.stop();
+        }
+      });
+
+      detector.start();
     },
     submitForm() {
       const formValid = this.$refs.form.validate();

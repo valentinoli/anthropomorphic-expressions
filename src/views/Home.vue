@@ -116,7 +116,7 @@
             </p>
             <v-btn
               @click="start"
-              color="info"
+              color="primary"
             >
               <v-icon left>mdi-robot</v-icon> start
             </v-btn>

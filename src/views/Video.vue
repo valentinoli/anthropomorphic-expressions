@@ -1,7 +1,7 @@
 <template>
   <div class="video-container">
     <div id="affdexElements"></div>
-    <v-slide-y-transition>
+    <!-- <v-slide-y-transition>
       <v-alert
         v-if="warning"
         type="warning"
@@ -9,7 +9,7 @@
       >
         {{ warning }}
       </v-alert>
-    </v-slide-y-transition>
+    </v-slide-y-transition> -->
     <video id="robotVideo">
       <source
         :src="`${
@@ -25,7 +25,12 @@
       absolute
       opacity=0.7
     >
-      <template v-if="loading">
+      <template v-if="warning">
+        <div>
+          {{ warning }}
+        </div>
+      </template>
+      <template v-else-if="loading">
         <div class="mb-3">
           This might take a few seconds
         </div>
@@ -144,6 +149,7 @@ export default {
       if (warning || this.warning) {
         // warning state is changing
         this.warning = warning;
+        this.overlay = warning;
       }
     },
   },

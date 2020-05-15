@@ -34,13 +34,13 @@ export default class WebcamDetectorAndVideoInterplay {
     detector.addEventListener('onInitializeFailure', (err) => console.error(err));
 
     // Add a callback to notify when detector is stopped
-    detector.addEventListener('onStopSuccess', () => console.log('The detector reports stopped'));
+    detector.addEventListener('onStopSuccess', () => console.info('The detector reports stopped'));
 
     // Add callbacks to notify when camera access is allowed/denied
     detector.addEventListener('onWebcamConnectSuccess', () => {
       // Access provided to web camera
       // Detector is started
-      console.log('Webcam access allowed');
+      console.info('Webcam access allowed');
     });
     detector.addEventListener('onWebcamConnectFailure', (error) => {
       // Access denied to web camera
@@ -94,7 +94,7 @@ export default class WebcamDetectorAndVideoInterplay {
   }
 
   onInitializeSuccess() {
-    console.log('The detector reports initialized');
+    console.info('The detector reports initialized');
 
     // Play video when detector has been initialized
     // Should start almost immediately predicting expression values
@@ -104,7 +104,7 @@ export default class WebcamDetectorAndVideoInterplay {
       // undefined in IE
       promise
         .then(() => {
-          console.log('Video started playing');
+          console.info('Video started playing');
         })
         .catch(console.error);
     }
@@ -114,7 +114,7 @@ export default class WebcamDetectorAndVideoInterplay {
     // Detector is started when user clicks the play button (see Vue Video component)
     if (this.detector && !this.detector.isRunning) {
       // Run start() in affdex.js
-      console.log('Detector started');
+      console.info('Detector started');
       this.detector.start();
 
       // Wait for onInitializeSuccess event to trigger...
@@ -125,8 +125,8 @@ export default class WebcamDetectorAndVideoInterplay {
 
   stopDetector() {
     if (this.detector && this.detector.isRunning) {
-      this.detector.removeEventListener(this.onImageResultsSuccess.bind(this));
-      console.log('Detector stopped');
+      this.detector.removeEventListener('onImageResultsSuccess');
+      console.info('Detector stopped');
       this.detector.stop();
     }
   }
