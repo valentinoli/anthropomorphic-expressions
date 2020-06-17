@@ -60,67 +60,74 @@
             anonymous</strong>.
           </p>
 
-          <!-- Insecure context checked first -->
-          <v-alert
-            v-if="!secureContext"
-            type="warning"
-            outlined
-          >
-            <strong>You must be viewing this page in a secure context to participate.</strong>
-            <div>
-              <a :href="`https://${host}`">Open in secure context</a>
-            </div>
-          </v-alert>
-
-          <!-- User can't authorize web cam in Facebook in-app browser or Instagram -->
-          <v-alert
-            v-else-if="isFacebookAppBrowser"
-            type="warning"
-            outlined
-          >
-            <strong>This app does not support the Facebook in-app browser</strong>
-            <div>
-              To participate, you must open the app in another browser. We recommend Chrome.
-            </div>
-          </v-alert>
-
-          <!-- Browser does not support required APIs -->
-          <v-alert
-            v-else-if="unsupportiveBrowser"
-            type="warning"
-            outlined
-          >
-            <strong>You must use a different browser to participate.</strong>
-            <div>
-              Your browser does not support the APIs this site requires
-            </div>
-          </v-alert>
-
-          <!-- User already submitted on the current browser
-               according to local storage parameter -->
-          <v-alert
-            v-else-if="getSubmitted()"
-            type="info"
-            outlined
-          >
-            You have already participated in the study. We appreciate your contribution!
-          </v-alert>
-
-          <!-- Else allow participation -->
-          <template v-else>
-            <p>
-              <em>
-                By clicking the start button you declare that you understand
-                and acknowledge the terms of the study
-              </em>
-            </p>
-            <v-btn
-              @click="start"
-              color="primary"
+          <v-template v-if="closed">
+            <v-alert type="info" outlined>
+              This study has been closed for now. Thanks to everyone who participated!
+            </v-alert>
+          </v-template>
+          <v-template v-else>
+            <!-- Insecure context checked first -->
+            <v-alert
+              v-if="!secureContext"
+              type="warning"
+              outlined
             >
-              <v-icon left>mdi-robot</v-icon> start
-            </v-btn>
-          </template>
+              <strong>You must be viewing this page in a secure context to participate.</strong>
+              <div>
+                <a :href="`https://${host}`">Open in secure context</a>
+              </div>
+            </v-alert>
+
+            <!-- User can't authorize web cam in Facebook in-app browser or Instagram -->
+            <v-alert
+              v-else-if="isFacebookAppBrowser"
+              type="warning"
+              outlined
+            >
+              <strong>This app does not support the Facebook in-app browser</strong>
+              <div>
+                To participate, you must open the app in another browser. We recommend Chrome.
+              </div>
+            </v-alert>
+
+            <!-- Browser does not support required APIs -->
+            <v-alert
+              v-else-if="unsupportiveBrowser"
+              type="warning"
+              outlined
+            >
+              <strong>You must use a different browser to participate.</strong>
+              <div>
+                Your browser does not support the APIs this site requires
+              </div>
+            </v-alert>
+
+            <!-- User already submitted on the current browser
+                 according to local storage parameter -->
+            <v-alert
+              v-else-if="getSubmitted()"
+              type="info"
+              outlined
+            >
+              You have already participated in the study. We appreciate your contribution!
+            </v-alert>
+
+            <!-- Else allow participation -->
+            <template v-else>
+              <p>
+                <em>
+                  By clicking the start button you declare that you understand
+                  and acknowledge the terms of the study
+                </em>
+              </p>
+              <v-btn
+                @click="start"
+                color="primary"
+              >
+                <v-icon left>mdi-robot</v-icon> start
+              </v-btn>
+            </template>
+          </v-template>
 
           <h2 class="mt-4">Who are we?</h2>
           <p>
@@ -162,6 +169,7 @@ export default {
   },
   data() {
     return {
+      closed: true,
       host: window.location.host,
       overlay: false,
     };
