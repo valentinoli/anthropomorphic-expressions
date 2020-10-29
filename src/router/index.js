@@ -19,12 +19,12 @@ const routes = [
     component: () => import('../views/General.vue'),
   },
   {
-    path: '/survey/:id([1-3])',
+    path: '/survey/:id([1-2])',
     name: 'Survey',
     component: () => import('../views/Survey.vue'),
   },
   {
-    path: '/video/:id([1-3])',
+    path: '/video/:id([1-2])',
     name: 'Video',
     component: () => import('../views/Video.vue'),
   },

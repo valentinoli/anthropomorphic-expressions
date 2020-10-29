@@ -78,12 +78,13 @@
 </template>
 
 <script>
-import Overlay from '@/components/Overlay.vue';
-import { setLatestCompletedStep, setItem, getRandomSequence } from '@/utils/local-storage';
-import survey from '@/utils/survey';
 import shuffle from 'lodash.shuffle';
 
-const defaultLang = 'en';
+import Overlay from '@/components/Overlay.vue';
+
+import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
+import survey from '@/utils/godspeed-survey';
+import steps from '@/utils/steps';
 
 export default {
   name: 'Survey',
@@ -93,27 +94,17 @@ export default {
   data() {
     return {
       langs: Object.keys(survey),
-      selectedLang: defaultLang,
+      selectedLang: 'en',
       overlay: false,
       radioRules: [
         (v) => !!v || '',
       ],
-      idParam: Number(this.$route.params.id),
     };
-  },
-  computed: {
-    randomSequenceId() {
-      // get random sequence from local storage
-      // and find the current random id
-      const randomSequence = getRandomSequence();
-      const index = this.idParam - 1;
-      return randomSequence[index];
-    },
   },
   created() {
     // Shuffle survey item indices beforehand to keep
     // the same shuffling if the user changes language
-    const { items } = survey[defaultLang];
+    const { items } = survey[this.selectedLang];
     const itemKeys = Object.keys(items);
     const indices = [...Array(itemKeys.length).keys()];
     this.indices = shuffle(indices);
@@ -130,20 +121,24 @@ export default {
 
       if (formValid) {
         this.overlay = true;
+        const { $route: { params, path } } = this;
+        const idParam = Number(params.id);
 
         // v-model directive on the radio button groups took care of
         // updating the values in this.form.items
         const submission = this.form.items.map(({ name, value }) => ({ name, value }));
-        const dataKey = `survey_${this.randomSequenceId}`;
+        const dataKey = `survey_${idParam}`;
         setItem(dataKey, JSON.stringify(submission));
 
         window.setTimeout(() => {
           // Set the latest completed step of the current participant
           // and save it in browser's local storage
-          setLatestCompletedStep(this.$route.path);
+          setLatestCompletedStep(path);
 
-          // Redirect user to next video/submission when data has been saved
-          const nextPath = this.idParam === 3 ? '/submit' : `/video/${this.idParam + 1}`;
+          // Redirect user to next step when data has been saved
+          const stepsPaths = Object.keys(steps);
+          const nextPathIndex = stepsPaths.indexOf(path) + 1;
+          const nextPath = stepsPaths[nextPathIndex];
           this.$router.replace(nextPath);
         }, 1000);
       } else {

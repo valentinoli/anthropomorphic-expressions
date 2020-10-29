@@ -6,10 +6,12 @@
     <!-- Form submitted  -->
     <template v-if="formSubmitted">
       <p>
-        You will now watch three short video clips of robots in a random order,
+        You will now watch two short video clips of robots,
         each followed by a quick questionnaire about your impression of the robot.
+        For convenience, the questionnaire is available in four languages:
+        English, French, German, and Spanish.
+        Finally, you will answer a few questions.
         As a reminder, please <strong>turn your audio volume on</strong>.
-        The survey is available in four languages, English, French, German, and Spanish.
       </p>
 
       <p>
@@ -179,8 +181,7 @@
 </template>
 
 <script>
-import { setLatestCompletedStep, setRandomSequence, setItem } from '@/utils/local-storage';
-import shuffle from 'lodash.shuffle';
+import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
 import Overlay from '@/components/Overlay.vue';
 
 export default {
@@ -286,11 +287,6 @@ export default {
       // Show loading state
       this.overlay = true;
       window.setTimeout(() => {
-        // Set a random sequence for the three video/survey pairs
-        // and save in local storage. This is to avoid response bias such that
-        // people would answer to meet the expectation of the research.
-        setRandomSequence(shuffle([1, 2, 3]));
-
         // Set latest completed step as '/general'
         setLatestCompletedStep(this.$route.path);
 

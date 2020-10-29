@@ -1,17 +1,5 @@
 <template>
   <v-app>
-    <!-- <v-app-bar app color="white" light>
-      <v-img
-        alt="EPFL Logo"
-        class="shrink mr-2"
-        contain
-        src="https://web2018.epfl.ch/4.2.0/icons/epfl-logo.svg"
-        transition="scale-transition"
-        width="40"
-      />
-      <span>Anthropomorphic Attitudes Towards Robots</span>
-    </v-app-bar> -->
-
     <v-content>
       <v-container fluid>
         <v-row align="center" justify="center">

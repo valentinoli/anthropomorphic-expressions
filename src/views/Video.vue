@@ -1,19 +1,10 @@
 <template>
   <div class="video-container">
     <div id="affdexElements"></div>
-    <!-- <v-slide-y-transition>
-      <v-alert
-        v-if="warning"
-        type="warning"
-        dense
-      >
-        {{ warning }}
-      </v-alert>
-    </v-slide-y-transition> -->
     <video id="robotVideo">
       <source
         :src="`${
-          require(`@/assets/video/video${randomSequenceId}.mp4`)
+          require(`@/assets/video/video${idParam}.mp4`)
         }#t=${playbackRange}`"
         type="video/mp4">
       <p>
@@ -59,7 +50,7 @@
 
 <script>
 import WebcamDetectorAndVideoInterplay from '@/utils/webcam-video-interplay';
-import { setLatestCompletedStep, setItem, getRandomSequence } from '@/utils/local-storage';
+import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
 import playbackRanges from '@/utils/playback-range';
 import processResults from '@/utils/process-affdex-predictions';
 
@@ -70,19 +61,14 @@ export default {
       overlay: true,
       loading: true,
       warning: false,
-      idParam: Number(this.$route.params.id),
     };
   },
   computed: {
-    randomSequenceId() {
-      // get random sequence from local storage
-      // and find the current random id
-      const randomSequence = getRandomSequence();
-      const index = this.idParam - 1;
-      return randomSequence[index];
+    idParam() {
+      return Number(this.$route.params.id);
     },
     playbackRange() {
-      return playbackRanges[this.randomSequenceId - 1];
+      return playbackRanges[this.idParam - 1];
     },
   },
   mounted() {
@@ -131,7 +117,7 @@ export default {
       const { timestamps, results } = this.interplay.data;
       const processedResults = processResults(results);
       const data = { timestamps, data: processedResults };
-      const dataKey = `video_${this.randomSequenceId}`;
+      const dataKey = `video_${this.idParam}`;
       setItem(dataKey, JSON.stringify(data));
 
       window.setTimeout(() => {

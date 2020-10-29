@@ -40,15 +40,16 @@
           <h2>How do I participate?</h2>
           <p>
             This web platform was created to facilitate the study and enable
-            individuals to participate.
+            individuals to participate. The minimum age to participate is 18.
           </p>
           <p>
-            You will watch <em>three</em> short video clips of robots in a random order,
+            You will watch <em>two</em> short video clips of robots,
             each followed by a quick questionnaire about your impression of the robot.
             As the videos come with sound, please remember to
-            <strong>turn your audio volume on</strong>. During the experiment it
-            is suggested that you have a good internet connection.
-            The overall process should only take about <u>5-10 minutes</u>.
+            <strong>turn your audio volume on</strong>.
+            Following this you will answer a few set of questions.
+            During the experiment it is suggested that you have a good internet connection.
+            The overall process should only take about <u>10-15 minutes</u>.
           </p>
           <p>
             Your face will be recorded at certain times during the experiment,
@@ -60,12 +61,12 @@
             anonymous</strong>.
           </p>
 
-          <v-template v-if="closed">
+          <template v-if="closed">
             <v-alert type="info" outlined>
               This study has been closed for now. Thanks to everyone who participated!
             </v-alert>
-          </v-template>
-          <v-template v-else>
+          </template>
+          <template v-else>
             <!-- Insecure context checked first -->
             <v-alert
               v-if="!secureContext"
@@ -127,7 +128,7 @@
                 <v-icon left>mdi-robot</v-icon> start
               </v-btn>
             </template>
-          </v-template>
+          </template>
 
           <h2 class="mt-4">Who are we?</h2>
           <p>
@@ -169,7 +170,7 @@ export default {
   },
   data() {
     return {
-      closed: true,
+      closed: false,
       host: window.location.host,
       overlay: false,
     };

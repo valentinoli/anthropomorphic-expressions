@@ -2,11 +2,10 @@ import AWS from 'aws-sdk';
 import crypto from 'crypto';
 
 const {
-  VUE_APP_BUCKETEER_AWS_ACCESS_KEY_ID: accessKeyId,
-  VUE_APP_BUCKETEER_AWS_SECRET_ACCESS_KEY: secretAccessKey,
-  VUE_APP_BUCKETEER_BUCKET_NAME: bucketName,
-  VUE_APP_BUCKETEER_AWS_REGION: region,
-  // VUE_APP_CUBENAME: cubeName,
+  VUE_APP_AWS_ACCESS_KEY_ID: accessKeyId,
+  VUE_APP_AWS_SECRET_ACCESS_KEY: secretAccessKey,
+  VUE_APP_AWS_BUCKET: bucketName,
+  VUE_APP_AWS_REGION: region,
 } = process.env;
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html
@@ -33,7 +32,9 @@ const putObject = (body) => {
 
   // We use the md5 checksum for the filename
   const folder = process.env.NODE_ENV === 'production' ? 'data' : 'devData';
-  const key = `${folder}/${contentMD5}.json`;
+  // Remove forward slash from checksum to avoid folder nesting
+  const filename = contentMD5.replace('/', '');
+  const key = `${folder}/${filename}.json`;
 
   const params = {
     Bucket: bucketName,
