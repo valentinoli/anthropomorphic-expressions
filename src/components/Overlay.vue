@@ -2,6 +2,7 @@
   <v-overlay
     :value="value"
   >
+    <slot></slot>
     <v-progress-circular
       indeterminate
       size="64"

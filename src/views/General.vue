@@ -1,7 +1,13 @@
 <template>
   <section>
     <div id="affdexElements"></div>
-    <Overlay :value="overlay"/>
+    <Overlay :value="overlay">
+      <template v-if="!faceDetected">
+        <div class="mb-3">
+          No face detected, please make sure your face is visible
+        </div>
+      </template>
+    </Overlay>
 
     <!-- Form submitted  -->
     <template v-if="formSubmitted">
@@ -195,7 +201,7 @@ export default {
       webcamDenied: false,
       testedFaceDetection: false,
       faceDetectionConfirmed: false,
-      faceDetected: false,
+      faceDetected: true,
       formSubmitted: false,
       overlay: false,
       gender: null,
@@ -259,13 +265,15 @@ export default {
         const success = faces.length === 1;
         attempts += 1;
         if (success) {
+          this.faceDetected = true;
           console.info('Face detected');
           successes += 1;
         } else {
+          this.faceDetected = false;
           console.warn('Face not detected');
         }
 
-        if (attempts > 30) {
+        if (attempts > 100) {
           detector.removeEventListener('onImageResultsSuccess');
           detector.stop();
         }

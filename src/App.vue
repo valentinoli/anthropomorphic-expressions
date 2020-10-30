@@ -121,4 +121,10 @@ section h2 {
 .v-footer {
   z-index: 10 !important;
 }
+
+.v-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>

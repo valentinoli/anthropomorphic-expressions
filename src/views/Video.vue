@@ -154,11 +154,3 @@ export default {
     margin-bottom: -6px;
   }
 </style>
-
-<style>
-.v-overlay__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-</style>
