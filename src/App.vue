@@ -88,37 +88,37 @@ export default {
 </script>
 
 <style>
-  section p {
-    text-align: justify;
-  }
+section p {
+  text-align: justify;
+}
 
-  section h2 {
-    margin-bottom: 4px;
-  }
+section h2 {
+  margin-bottom: 4px;
+}
 
-  .view-container {
-    min-height: 90vh;
-  }
+.view-container {
+  min-height: 90vh;
+}
 
-  .v-stepper,
-  .mobile-step-card {
-    margin-bottom: 20px;
-  }
+.v-stepper,
+.mobile-step-card {
+  margin-bottom: 20px;
+}
 
-  .mobile-step-card {
-    padding: 24px;
-  }
+.mobile-step-card {
+  padding: 24px;
+}
 
-  .contact-link {
-    color: white !important;
-    text-decoration: none;
-  }
+.contact-link {
+  color: white !important;
+  text-decoration: none;
+}
 
-  .contact-link:hover {
-    text-decoration: underline;
-  }
+.contact-link:hover {
+  text-decoration: underline;
+}
 
-  .v-footer {
-    z-index: 10 !important;
-  }
+.v-footer {
+  z-index: 10 !important;
+}
 </style>

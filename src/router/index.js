@@ -29,6 +29,14 @@ const routes = [
     component: () => import('../views/Video.vue'),
   },
   {
+    path: '/questionnaire/aq10',
+    component: () => import('../views/QuestionnaireAQ10.vue'),
+  },
+  {
+    path: '/questionnaire/spqb',
+    component: () => import('../views/QuestionnaireSPQB.vue'),
+  },
+  {
     path: '/submit',
     name: 'Submit',
     component: () => import('../views/Submit.vue'),

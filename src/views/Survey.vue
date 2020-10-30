@@ -84,7 +84,7 @@ import Overlay from '@/components/Overlay.vue';
 
 import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
 import survey from '@/utils/godspeed-survey';
-import steps from '@/utils/steps';
+import nextStep from '@/utils/next-step';
 
 export default {
   name: 'Survey',
@@ -136,16 +136,13 @@ export default {
           setLatestCompletedStep(path);
 
           // Redirect user to next step when data has been saved
-          const stepsPaths = Object.keys(steps);
-          const nextPathIndex = stepsPaths.indexOf(path) + 1;
-          const nextPath = stepsPaths[nextPathIndex];
-          this.$router.replace(nextPath);
+          const toPath = nextStep(path);
+          this.$router.replace(toPath);
         }, 1000);
       } else {
         // Scroll to first error
-        const { id: firstErrorId } = this.$refs.form.inputs.find(({ hasError }) => hasError);
-        const el = document.getElementById(firstErrorId);
-        el.scrollIntoView();
+        const { $el } = this.$refs.form.inputs.find(({ hasError }) => hasError);
+        $el.scrollIntoView();
       }
     },
     updateForm() {

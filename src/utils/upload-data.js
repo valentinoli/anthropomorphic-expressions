@@ -9,9 +9,9 @@ export default async () => {
     survey: {},
   };
 
-  const numbers = [1, 2];
+  const videoIds = [1, 2];
 
-  numbers.forEach((num) => {
+  videoIds.forEach((num) => {
     const key = `video_${num}`;
     const item = getItem(key);
     if (!item) {
@@ -20,7 +20,7 @@ export default async () => {
     data.video[num] = JSON.parse(item);
   });
 
-  numbers.forEach((num) => {
+  videoIds.forEach((num) => {
     const key = `survey_${num}`;
     const item = getItem(key);
     if (!item) {
@@ -29,13 +29,15 @@ export default async () => {
     data.survey[num] = JSON.parse(item);
   });
 
-  const key = 'general';
-  const generalInfo = getItem(key);
-  if (!generalInfo) {
-    throw stepError(key);
-  }
+  const keys = ['general', 'aq10', 'sqpb'];
+  keys.forEach((key) => {
+    const val = getItem(key);
+    if (!val) {
+      throw stepError(key);
+    }
 
-  data.general = JSON.parse(generalInfo);
+    data[key] = JSON.parse(val);
+  });
 
   const json = JSON.stringify(data);
 
