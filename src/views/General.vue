@@ -206,7 +206,7 @@ export default {
       overlay: false,
       gender: null,
       age: null,
-      alertWidth: 'max-content',
+      alertWidth: 'fit-content',
     };
   },
   methods: {
