@@ -33,7 +33,7 @@ const putObject = (body) => {
   // We use the md5 checksum for the filename
   const folder = process.env.NODE_ENV === 'production' ? 'data' : 'devData';
   // Remove forward slash from checksum to avoid folder nesting
-  const filename = contentMD5.replace('/', '');
+  const filename = contentMD5.replace(/\//g, '');
   const key = `${folder}/${filename}.json`;
 
   const params = {
