@@ -126,11 +126,10 @@
               </p>
               <v-btn
                 color="primary"
+                prepend-icon="mdi-robot"
                 @click="start"
               >
-                <v-icon left>
-                  mdi-robot
-                </v-icon> start
+                start
               </v-btn>
             </template>
           </template>
@@ -242,10 +241,6 @@ export default {
 <style scoped>
 .home {
   position: relative;
-}
-
-.home p {
-  padding-bottom: 1rem
 }
 
 .wall-e {

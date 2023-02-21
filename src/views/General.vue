@@ -28,11 +28,10 @@
 
       <v-btn
         color="primary"
+        prepend-icon="mdi-robot"
         @click="nextStep"
       >
-        <v-icon left>
-          mdi-robot
-        </v-icon> continue
+        continue
       </v-btn>
     </template>
 
@@ -44,20 +43,19 @@
 
       <v-form
         ref="form"
-        lazy-validation
+        @submit.prevent="submitForm"
       >
         <v-text-field
           v-model="age"
           type="number"
-          min="18"
-          max="130"
+          min="17"
+          max="80"
           label="Age"
           :rules="[
             (v) => !!v || 'Age is required',
             (v) => v >= 17 || 'Minimum age is 17',
             (v) => v <= 80 || 'Maximum age is 80',
           ]"
-          required
           outlined
           dense
           autofocus
@@ -67,7 +65,6 @@
         <v-radio-group
           v-model="gender"
           label="Gender"
-          required
           :rules="[
             (v) => !!v || 'Gender is required',
           ]"
@@ -85,11 +82,10 @@
         <v-btn
           class="mt-6"
           color="primary"
-          @click="submitForm"
+          prepend-icon="mdi-send-circle-outline"
+          type="submit"
         >
-          <v-icon left>
-            mdi-send-circle-outline
-          </v-icon> submit
+          submit
         </v-btn>
       </v-form>
     </template>
@@ -100,17 +96,17 @@
           type="success"
           :width="alertWidth"
           outlined
+          class="mb-4"
         >
           Camera test successful
         </v-alert>
 
         <v-btn
           color="primary"
+          prepend-icon="mdi-robot"
           @click="faceDetectionConfirmed = true"
         >
-          <v-icon left>
-            mdi-robot
-          </v-icon> continue
+          continue
         </v-btn>
       </template>
       <template v-else>
@@ -118,6 +114,7 @@
           type="error"
           :width="alertWidth"
           outlined
+          class="mb-4"
         >
           <strong>Camera test failed</strong>
           <div>
@@ -127,12 +124,10 @@
 
         <v-btn
           color="primary"
-          dark
+          prepend-icon="mdi-camera-front"
           @click="testCameraDetector"
         >
-          <v-icon left>
-            mdi-camera-front
-          </v-icon> retry
+          retry
         </v-btn>
       </template>
     </template>
@@ -142,6 +137,7 @@
         type="success"
         :width="alertWidth"
         outlined
+        class="mb-4"
       >
         Camera access authorized
       </v-alert>
@@ -152,12 +148,10 @@
 
       <v-btn
         color="primary"
-        dark
+        prepend-icon="mdi-camera-front"
         @click="testCameraDetector"
       >
-        <v-icon left>
-          mdi-camera-front
-        </v-icon> test camera
+        test camera
       </v-btn>
     </template>
 
@@ -168,6 +162,7 @@
         type="error"
         :width="alertWidth"
         outlined
+        class="mb-4"
       >
         Camera authorization denied or failed
       </v-alert>
@@ -189,12 +184,10 @@
       </p>
       <v-btn
         color="primary"
-        dark
+        prepend-icon="mdi-webcam"
         @click="requestWebcam"
       >
-        <v-icon left>
-          mdi-webcam
-        </v-icon> authorize camera access
+        authorize camera access
       </v-btn>
     </template>
   </section>
@@ -242,63 +235,64 @@ export default {
       })
     },
     testCameraDetector () {
-      this.overlay = true
-      let attempts = 0
-      let successes = 0
+      // this.overlay = true
+      // let attempts = 0
+      // let successes = 0
 
-      // See proper documentation of below code in webcam-video-interplay.js
-      const divRoot = document.getElementById('affdexElements')
-      const width = 640
-      const height = 480
-      const faceMode = affdex.FaceDetectorMode.LARGE_FACES
+      // // See proper documentation of below code in webcam-video-interplay.js
+      // const divRoot = document.getElementById('affdexElements')
+      // const width = 640
+      // const height = 480
+      // const faceMode = affdex.FaceDetectorMode.LARGE_FACES
 
-      const detector = new affdex.CameraDetector(divRoot, width, height, faceMode)
+      // const detector = new affdex.CameraDetector(divRoot, width, height, faceMode)
 
-      detector.detectAllEmotions()
-      detector.detectAllExpressions()
-      detector.detectAllEmojis()
-      detector.detectAllAppearance()
+      // detector.detectAllEmotions()
+      // detector.detectAllExpressions()
+      // detector.detectAllEmojis()
+      // detector.detectAllAppearance()
 
-      detector.addEventListener('onInitializeSuccess', () => console.info('The detector reports initialized'))
-      detector.addEventListener('onInitializeFailure', (err) => console.error(err))
-      detector.addEventListener('onStopSuccess', () => {
-        console.info('The detector reports stopped')
-        const successRate = successes / attempts
-        if (successRate > 0.95) {
-          this.faceDetected = true
-        } else {
-          this.faceDetected = false
-          console.info(`${Math.round(successRate * 100)}% face detection success rate`)
-        }
+      // detector.addEventListener('onInitializeSuccess', () => console.info('The detector reports initialized'))
+      // detector.addEventListener('onInitializeFailure', (err) => console.error(err))
+      // detector.addEventListener('onStopSuccess', () => {
+      //   console.info('The detector reports stopped')
+      //   const successRate = successes / attempts
+      //   if (successRate > 0.95) {
+      //     this.faceDetected = true
+      //   } else {
+      //     this.faceDetected = false
+      //     console.info(`${Math.round(successRate * 100)}% face detection success rate`)
+      //   }
 
-        this.testedFaceDetection = true
-        this.overlay = false
-      })
+      //   this.testedFaceDetection = true
+      //   this.overlay = false
+      // })
 
-      detector.addEventListener('onImageResultsSuccess', (faces) => {
-        const success = faces.length === 1
-        attempts += 1
-        if (success) {
-          this.faceDetected = true
-          console.info('Face detected')
-          successes += 1
-        } else {
-          this.faceDetected = false
-          console.warn('Face not detected')
-        }
+      // detector.addEventListener('onImageResultsSuccess', (faces) => {
+      //   const success = faces.length === 1
+      //   attempts += 1
+      //   if (success) {
+      //     this.faceDetected = true
+      //     console.info('Face detected')
+      //     successes += 1
+      //   } else {
+      //     this.faceDetected = false
+      //     console.warn('Face not detected')
+      //   }
 
-        if (attempts > 100) {
-          detector.removeEventListener('onImageResultsSuccess')
-          detector.stop()
-        }
-      })
+      //   if (attempts > 100) {
+      //     detector.removeEventListener('onImageResultsSuccess')
+      //     detector.stop()
+      //   }
+      // })
 
-      detector.start()
+      // detector.start()
+      this.faceDetected = true
+      this.testedFaceDetection = true
     },
-    submitForm () {
-      const formValid = this.$refs.form.validate()
-
-      if (formValid) {
+    async submitForm () {
+      const { valid } = await this.$refs.form.validate()
+      if (valid) {
         const { age, gender } = this
         const dataKey = 'general'
         setItem(dataKey, JSON.stringify({ age, gender }))

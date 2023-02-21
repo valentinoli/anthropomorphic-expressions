@@ -38,7 +38,7 @@
               <!-- Show alternative to the stepper on mobile  -->
               <!-- <template v-else> -->
               <v-card class="mobile-step-card d-flex justify-center">
-                <div class="headline font-weight-bold">
+                <div class="text-h6 font-weight-bold py-2">
                   {{ steps[currentStep - 1][1] }}
                 </div>
               </v-card>
@@ -117,6 +117,10 @@ export default {
 </script>
 
 <style>
+p {
+  padding-bottom: 1rem
+}
+
 section p {
   text-align: justify;
 }

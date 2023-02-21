@@ -98,7 +98,7 @@ class WebcamDetectorAndVideoInterplay {
 
     // Play video when detector has been initialized
     // Should start almost immediately predicting expression values
-    // Triggers HTMLMediaElement: play event (see handling in the Vue Video component)
+    // Triggers HTMLMediaElement: play event (see handling in the Vue VideoPlayer component)
     const promise = this.video.play()
     if (promise) {
       // undefined in IE

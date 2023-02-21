@@ -11,9 +11,10 @@
       </p>
     </video>
     <v-overlay
-      :value="overlay"
+      v-model="overlay"
+      attach=".video-container"
       absolute
-      opacity="0.7"
+      content-class="v-overlay__content-video"
     >
       <template v-if="warning">
         <div>
@@ -21,7 +22,7 @@
         </div>
       </template>
       <template v-else-if="loading">
-        <div class="mb-3">
+        <div class="text-h5 mb-3 font-weight-bold">
           This might take a few seconds
         </div>
         <v-progress-circular
@@ -30,17 +31,14 @@
         />
       </template>
       <template v-else>
-        <div class="mb-3">
+        <div class="text-h5 mb-3 font-weight-bold">
           Please make sure your audio is on
         </div>
         <v-btn
-          fab
-          light
           large
+          icon="mdi-play"
           @click="onPlayButtonClick"
-        >
-          <v-icon>mdi-play</v-icon>
-        </v-btn>
+        />
       </template>
     </v-overlay>
   </div>
@@ -56,6 +54,7 @@ export default {
   name: 'VideoPlayer',
   data () {
     const idParam = Number(this.$route.params.id)
+    console.log(idParam)
     return {
       overlay: true,
       loading: true,
@@ -65,15 +64,19 @@ export default {
       src: undefined
     }
   },
-  async created () {
-    const src = await import(
-      `@/assets/video/video${this.idParam}.mp4`
-    )
+  created () {
+    console.log(this.idParam)
+    // const srcUrl = await import(`@/assets/video/video${this.idParam}.mp4`)
+    const src = new URL(
+      `/src/assets/video/video${this.idParam}.mp4`,
+      import.meta.url
+    ).href
     console.log(src)
     this.src = `${src}#t=${this.playbackRange}`
   },
   mounted () {
     const videoEl = this.$el.querySelector('#robotVideo')
+    console.log(videoEl)
     this.interplay = new WebcamDetectorAndVideoInterplay(this, videoEl)
 
     videoEl.addEventListener('canplaythrough', this.onVideoCanplaythrough)
@@ -82,6 +85,7 @@ export default {
   },
   methods: {
     onVideoCanplaythrough () {
+      console.log('canplay')
       // The browser estimates it can play the media
       // up to its end without stopping for content buffering.
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event
@@ -97,6 +101,7 @@ export default {
       this.loading = true
     },
     onVideoPlay () {
+      console.log('play')
       // Video starts playing after detector has started
       // (see interplay class onInitializeSuccess method)
       // --> hide overlay
@@ -154,4 +159,15 @@ export default {
     object-fit: contain;
     margin-bottom: -6px;
   }
+</style>
+
+<style>
+/* cannot be scoped */
+.v-overlay__content.v-overlay__content-video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
 </style>
