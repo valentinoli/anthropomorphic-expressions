@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <Overlay :value="overlay"/>
+    <Overlay :value="overlay" />
     <v-img
-      :src="require('@/assets/wall-e.png')"
+      :src="srcWallE"
       width="96"
       class="wall-e d-none d-md-block"
-    ></v-img>
+    />
     <v-row>
       <v-col cols="12">
         <section class="font-weight-light">
@@ -57,12 +57,15 @@
             Please make sure that your face, and only yours, is visible to the camera.
             Note that <strong>we will not save any video recordings</strong> since
             the frames are processed in real-time. <strong>No personal or
-            traceable data will be stored</strong> either. Your participation is <strong>completely
-            anonymous</strong>.
+              traceable data will be stored</strong> either. Your participation is <strong>completely
+              anonymous</strong>.
           </p>
 
           <template v-if="closed">
-            <v-alert type="info" outlined>
+            <v-alert
+              type="info"
+              outlined
+            >
               This study has been closed for now. Thanks to everyone who participated!
             </v-alert>
           </template>
@@ -122,15 +125,19 @@
                 </em>
               </p>
               <v-btn
-                @click="start"
                 color="primary"
+                @click="start"
               >
-                <v-icon left>mdi-robot</v-icon> start
+                <v-icon left>
+                  mdi-robot
+                </v-icon> start
               </v-btn>
             </template>
           </template>
 
-          <h2 class="mt-4">Who are we?</h2>
+          <h2 class="mt-4">
+            Who are we?
+          </h2>
           <p>
             We are two master's students in Data Science at EPFL.
             Our supervisor is prof. Ahmad Abu-Akel.
@@ -141,7 +148,10 @@
             Thank you for your support!
           </p>
 
-          <v-row align="center" justify="center">
+          <v-row
+            align="center"
+            justify="center"
+          >
             <Avatar
               v-for="person in $options.people"
               :key="person.src"
@@ -155,49 +165,53 @@
 </template>
 
 <script>
-import { setLatestCompletedStep, getSubmitted } from '@/utils/local-storage';
-import Avatar from '@/components/Avatar.vue';
-import Overlay from '@/components/Overlay.vue';
-import valentinSrc from '@/assets/valentin.jpg';
-import ahmadSrc from '@/assets/ahmad.jpg';
-import paulSrc from '@/assets/paul.jpg';
+import { setLatestCompletedStep, getSubmitted } from '@/utils/local-storage'
+
+import Avatar from '@/components/Avatar.vue'
+import Overlay from '@/components/Overlay.vue'
+
+import valentinSrc from '@/assets/valentin.jpg'
+import ahmadSrc from '@/assets/ahmad.jpg'
+import paulSrc from '@/assets/paul.jpg'
+import srcWallE from '@/assets/wall-e.png'
 
 export default {
   name: 'Home',
   components: {
     Avatar,
-    Overlay,
+    Overlay
   },
-  data() {
+  data () {
     return {
       closed: false,
       host: window.location.host,
       overlay: false,
-    };
+      srcWallE
+    }
   },
-  created() {
-    this.secureContext = process.env.NODE_ENV === 'development' || window.location.protocol.includes('https');
+  created () {
+    this.secureContext = import.meta.env.NODE_ENV === 'development' || window.location.protocol.includes('https')
     this.unsupportiveBrowser = (
-      !window.navigator.mediaDevices
-      || !window.navigator.mediaDevices.getUserMedia
-      || !window.localStorage
-    );
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    this.isFacebookAppBrowser = (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1) || (ua.indexOf('Instagram') > -1);
+      !window.navigator.mediaDevices ||
+      !window.navigator.mediaDevices.getUserMedia ||
+      !window.localStorage
+    )
+    const ua = navigator.userAgent || navigator.vendor || window.opera
+    this.isFacebookAppBrowser = (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1) || (ua.indexOf('Instagram') > -1)
   },
   methods: {
-    start() {
+    start () {
       // Show loading state
-      this.overlay = true;
+      this.overlay = true
       window.setTimeout(() => {
         // Set latest completed step as '/'
-        setLatestCompletedStep(this.$route.path);
+        setLatestCompletedStep(this.$route.path)
 
         // Redirect user to /general
-        this.$router.replace('/general');
-      }, 500);
+        this.$router.replace('/general')
+      }, 500)
     },
-    getSubmitted,
+    getSubmitted
   },
   people: [
     {
@@ -205,24 +219,24 @@ export default {
       name: 'Valentin Oliver Loftsson',
       role: 'Data Science, MSc',
       institution: 'EPFL',
-      email: 'valentin.loftsson@epfl.ch',
+      email: 'valentin.loftsson@epfl.ch'
     },
     {
       src: paulSrc,
       name: 'Paul Griesser',
       role: 'Data Science, MSc',
       institution: 'EPFL',
-      email: 'paul.griesser@epfl.ch',
+      email: 'paul.griesser@epfl.ch'
     },
     {
       src: ahmadSrc,
       name: 'Ahmad Abu-Akel',
       role: 'Research Fellow, PhD',
       institution: 'Institution of Psychology, UNIL',
-      email: 'ahmad.abuakel@unil.ch',
-    },
-  ],
-};
+      email: 'ahmad.abuakel@unil.ch'
+    }
+  ]
+}
 </script>
 
 <style scoped>
@@ -230,9 +244,13 @@ export default {
   position: relative;
 }
 
+.home p {
+  padding-bottom: 1rem
+}
+
 .wall-e {
   position: absolute;
   right: 0;
-  top: 65px;
+  top: 20px;
 }
 </style>

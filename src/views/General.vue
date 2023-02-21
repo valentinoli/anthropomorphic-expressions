@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div id="affdexElements"></div>
+    <div id="affdexElements" />
     <Overlay :value="overlay">
       <template v-if="!faceDetected">
         <div class="mb-3">
@@ -27,10 +27,12 @@
       </p>
 
       <v-btn
-        @click="nextStep"
         color="primary"
+        @click="nextStep"
       >
-        <v-icon left>mdi-robot</v-icon> continue
+        <v-icon left>
+          mdi-robot
+        </v-icon> continue
       </v-btn>
     </template>
 
@@ -60,7 +62,7 @@
           dense
           autofocus
           style="width: 150px;"
-        ></v-text-field>
+        />
 
         <v-radio-group
           v-model="gender"
@@ -73,20 +75,21 @@
           <v-radio
             label="Female"
             value="Female"
-          ></v-radio>
+          />
           <v-radio
             label="Male"
             value="Male"
-          ></v-radio>
+          />
         </v-radio-group>
-
 
         <v-btn
           class="mt-6"
           color="primary"
           @click="submitForm"
         >
-          <v-icon left>mdi-send-circle-outline</v-icon> submit
+          <v-icon left>
+            mdi-send-circle-outline
+          </v-icon> submit
         </v-btn>
       </v-form>
     </template>
@@ -101,8 +104,13 @@
           Camera test successful
         </v-alert>
 
-        <v-btn color="primary" @click="faceDetectionConfirmed = true">
-          <v-icon left>mdi-robot</v-icon> continue
+        <v-btn
+          color="primary"
+          @click="faceDetectionConfirmed = true"
+        >
+          <v-icon left>
+            mdi-robot
+          </v-icon> continue
         </v-btn>
       </template>
       <template v-else>
@@ -118,11 +126,13 @@
         </v-alert>
 
         <v-btn
-          @click="testCameraDetector"
           color="primary"
           dark
+          @click="testCameraDetector"
         >
-          <v-icon left>mdi-camera-front</v-icon> retry
+          <v-icon left>
+            mdi-camera-front
+          </v-icon> retry
         </v-btn>
       </template>
     </template>
@@ -141,11 +151,13 @@
       </p>
 
       <v-btn
-        @click="testCameraDetector"
         color="primary"
         dark
+        @click="testCameraDetector"
       >
-        <v-icon left>mdi-camera-front</v-icon> test camera
+        <v-icon left>
+          mdi-camera-front
+        </v-icon> test camera
       </v-btn>
     </template>
 
@@ -172,30 +184,32 @@
         Please make sure that your face, and only yours, is visible to the camera.
         Note that <strong>we will not save any video recordings</strong> since
         the frames are processed in real-time. <strong>No personal or
-        traceable data will be stored</strong> either. Your participation is <strong>completely
-        anonymous</strong>.
+          traceable data will be stored</strong> either. Your participation is <strong>completely
+          anonymous</strong>.
       </p>
       <v-btn
-        @click="requestWebcam"
         color="primary"
         dark
+        @click="requestWebcam"
       >
-        <v-icon left>mdi-webcam</v-icon> authorize camera access
+        <v-icon left>
+          mdi-webcam
+        </v-icon> authorize camera access
       </v-btn>
     </template>
   </section>
 </template>
 
 <script>
-import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
-import Overlay from '@/components/Overlay.vue';
+import { setLatestCompletedStep, setItem } from '@/utils/local-storage'
+import Overlay from '@/components/Overlay.vue'
 
 export default {
   name: 'General',
   components: {
-    Overlay,
+    Overlay
   },
-  data() {
+  data () {
     return {
       webcamAuthorized: false,
       webcamDenied: false,
@@ -206,102 +220,102 @@ export default {
       overlay: false,
       gender: null,
       age: null,
-      alertWidth: 'fit-content',
-    };
+      alertWidth: 'fit-content'
+    }
   },
   methods: {
-    requestWebcam() {
+    requestWebcam () {
       window.navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: false,
+        audio: false
       }).then((stream) => {
-        this.webcamAuthorized = true;
+        this.webcamAuthorized = true
         if (stream) {
           stream.getTracks().forEach((track) => {
-            track.stop();
-          });
+            track.stop()
+          })
         }
       }).catch((err) => {
         // Permission denied?
-        this.webcamDenied = true;
-        console.error(err);
-      });
+        this.webcamDenied = true
+        console.error(err)
+      })
     },
-    testCameraDetector() {
-      this.overlay = true;
-      let attempts = 0;
-      let successes = 0;
+    testCameraDetector () {
+      this.overlay = true
+      let attempts = 0
+      let successes = 0
 
       // See proper documentation of below code in webcam-video-interplay.js
-      const divRoot = document.getElementById('affdexElements');
-      const width = 640;
-      const height = 480;
-      const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
+      const divRoot = document.getElementById('affdexElements')
+      const width = 640
+      const height = 480
+      const faceMode = affdex.FaceDetectorMode.LARGE_FACES
 
-      const detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
+      const detector = new affdex.CameraDetector(divRoot, width, height, faceMode)
 
-      detector.detectAllEmotions();
-      detector.detectAllExpressions();
-      detector.detectAllEmojis();
-      detector.detectAllAppearance();
+      detector.detectAllEmotions()
+      detector.detectAllExpressions()
+      detector.detectAllEmojis()
+      detector.detectAllAppearance()
 
-      detector.addEventListener('onInitializeSuccess', () => console.info('The detector reports initialized'));
-      detector.addEventListener('onInitializeFailure', (err) => console.error(err));
+      detector.addEventListener('onInitializeSuccess', () => console.info('The detector reports initialized'))
+      detector.addEventListener('onInitializeFailure', (err) => console.error(err))
       detector.addEventListener('onStopSuccess', () => {
-        console.info('The detector reports stopped');
-        const successRate = successes / attempts;
+        console.info('The detector reports stopped')
+        const successRate = successes / attempts
         if (successRate > 0.95) {
-          this.faceDetected = true;
+          this.faceDetected = true
         } else {
-          this.faceDetected = false;
-          console.info(`${Math.round(successRate * 100)}% face detection success rate`);
+          this.faceDetected = false
+          console.info(`${Math.round(successRate * 100)}% face detection success rate`)
         }
 
-        this.testedFaceDetection = true;
-        this.overlay = false;
-      });
+        this.testedFaceDetection = true
+        this.overlay = false
+      })
 
       detector.addEventListener('onImageResultsSuccess', (faces) => {
-        const success = faces.length === 1;
-        attempts += 1;
+        const success = faces.length === 1
+        attempts += 1
         if (success) {
-          this.faceDetected = true;
-          console.info('Face detected');
-          successes += 1;
+          this.faceDetected = true
+          console.info('Face detected')
+          successes += 1
         } else {
-          this.faceDetected = false;
-          console.warn('Face not detected');
+          this.faceDetected = false
+          console.warn('Face not detected')
         }
 
         if (attempts > 100) {
-          detector.removeEventListener('onImageResultsSuccess');
-          detector.stop();
+          detector.removeEventListener('onImageResultsSuccess')
+          detector.stop()
         }
-      });
+      })
 
-      detector.start();
+      detector.start()
     },
-    submitForm() {
-      const formValid = this.$refs.form.validate();
+    submitForm () {
+      const formValid = this.$refs.form.validate()
 
       if (formValid) {
-        const { age, gender } = this;
-        const dataKey = 'general';
-        setItem(dataKey, JSON.stringify({ age, gender }));
-        this.formSubmitted = true;
+        const { age, gender } = this
+        const dataKey = 'general'
+        setItem(dataKey, JSON.stringify({ age, gender }))
+        this.formSubmitted = true
       }
     },
-    nextStep() {
+    nextStep () {
       // Show loading state
-      this.overlay = true;
+      this.overlay = true
       window.setTimeout(() => {
         // Set latest completed step as '/general'
-        setLatestCompletedStep(this.$route.path);
+        setLatestCompletedStep(this.$route.path)
 
         // Redirect user to first video
-        this.$router.replace('/video/1');
-      }, 1500);
-    },
-  },
-};
+        this.$router.replace('/video/1')
+      }, 1500)
+    }
+  }
+}
 </script>

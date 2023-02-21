@@ -8,8 +8,8 @@ export const aq10 = [
   'When I’m reading a story I find it difficult to work out the characters’ intentions',
   'I like to collect information about categories of things (e.g. types of car, types of bird, types of train, types of plant etc)',
   'I find it easy to work out what someone is thinking or feeling just by looking at their face',
-  'I find it difficult to work out people’s intentions',
-];
+  'I find it difficult to work out people’s intentions'
+]
 
 export const spqb = [
   'Have you ever had the sense that some person or force is around you, even though you cannot see anyone?',
@@ -19,5 +19,5 @@ export const spqb = [
   'When shopping do you get the feeling that other people are taking notice of you?',
   'Have you had experiences with astrology, seeing the future, UFOs, ESP, or a sixth sense?',
   'Do you ever suddenly feel distracted by distant sounds that you are not normally aware of?',
-  'Do you often have to keep an eye out to stop people from taking advantage of you?',
-];
+  'Do you often have to keep an eye out to stop people from taking advantage of you?'
+]

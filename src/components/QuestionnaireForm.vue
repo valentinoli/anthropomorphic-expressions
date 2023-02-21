@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Overlay :value="overlay"/>
+    <Overlay :value="overlay" />
     <v-form
       ref="form"
       lazy-validation
@@ -16,9 +16,9 @@
           </div>
 
           <v-radio-group
+            :id="item.name"
             v-model="item.value"
             :name="item.name"
-            :id="item.name"
             :rules="radioRules"
             required
             :row="$vuetify.breakpoint.smAndUp"
@@ -29,7 +29,7 @@
               :key="choice.text"
               :label="choice.text"
               :value="choice.value"
-            ></v-radio>
+            />
           </v-radio-group>
         </div>
       </div>
@@ -40,7 +40,9 @@
           color="success"
           @click="submit"
         >
-          <v-icon left>mdi-send-circle-outline</v-icon>submit
+          <v-icon left>
+            mdi-send-circle-outline
+          </v-icon>submit
         </v-btn>
       </v-row>
     </v-form>
@@ -48,42 +50,48 @@
 </template>
 
 <script>
-import Overlay from '@/components/Overlay.vue';
-import nextStep from '@/utils/next-step';
-import { setItem, setLatestCompletedStep } from '@/utils/local-storage';
+import Overlay from '@/components/Overlay.vue'
+import nextStep from '@/utils/next-step'
+import { setItem, setLatestCompletedStep } from '@/utils/local-storage'
 
 export default {
   components: {
-    Overlay,
+    Overlay
   },
   props: {
     dataKey: {
       required: true,
-      type: String,
+      type: String
     },
-    items: Array,
-    choices: Array,
+    items: {
+      required: true,
+      type: Array
+    },
+    choices: {
+      required: true,
+      type: Array
+    }
   },
-  data() {
+  data () {
     return {
       overlay: false,
       radioRules: [
-        (v) => v === 0 || !!v || '',
-      ],
-    };
+        (v) => v === 0 || !!v || ''
+      ]
+    }
   },
   methods: {
-    submit() {
-      const formValid = this.$refs.form.validate();
+    submit () {
+      const formValid = this.$refs.form.validate()
 
       if (formValid) {
-        this.overlay = true;
+        this.overlay = true
 
-        const data = this.items.map(({ name, value }) => ({ name, value }));
+        const data = this.items.map(({ name, value }) => ({ name, value }))
 
         const submission = {
-          data,
-        };
+          data
+        }
         if (this.dataKey === 'aq10') {
           // Compute score for AQ10 test
           // SCORING: Only 1 point can be scored for each question.
@@ -98,46 +106,46 @@ export default {
           // 2: Slightly Agree
           // 3: Slightly Disagree
           // 4: Definitely Disagree
-          const questionsAgreeScored = [1, 7, 8, 10].map((k) => `q${k}`);
-          const questionsDisagreeScored = [2, 3, 4, 5, 6, 9].map((k) => `q${k}`);
-          let totalScore = 0;
+          const questionsAgreeScored = [1, 7, 8, 10].map((k) => `q${k}`)
+          const questionsDisagreeScored = [2, 3, 4, 5, 6, 9].map((k) => `q${k}`)
+          let totalScore = 0
 
           data.forEach(({ name, value }, idx) => {
-            let score = 0;
+            let score = 0
             if (
-              (questionsAgreeScored.includes(name) && value <= 2)
-              || (questionsDisagreeScored.includes(name) && value >= 3)
+              (questionsAgreeScored.includes(name) && value <= 2) ||
+              (questionsDisagreeScored.includes(name) && value >= 3)
             ) {
-              totalScore += 1;
-              score = 1;
+              totalScore += 1
+              score = 1
             }
-            submission.data[idx].score = score;
-          });
+            submission.data[idx].score = score
+          })
 
-          submission.totalScore = totalScore;
-          submission.considerDiagnosticAssessment = totalScore >= 6;
+          submission.totalScore = totalScore
+          submission.considerDiagnosticAssessment = totalScore >= 6
         }
-        setItem(this.dataKey, JSON.stringify(submission));
+        setItem(this.dataKey, JSON.stringify(submission))
 
-        const { path } = this.$route;
+        const { path } = this.$route
 
         window.setTimeout(() => {
           // Set the latest completed step of the current participant
           // and save it in browser's local storage
-          setLatestCompletedStep(path);
+          setLatestCompletedStep(path)
 
           // Redirect user to next step when data has been saved
-          const toPath = nextStep(path);
-          this.$router.replace(toPath);
-        }, 1000);
+          const toPath = nextStep(path)
+          this.$router.replace(toPath)
+        }, 1000)
       } else {
         // Scroll to first error
-        const { $el } = this.$refs.form.inputs.find(({ hasError }) => hasError);
-        $el.scrollIntoView();
+        const { $el } = this.$refs.form.inputs.find(({ hasError }) => hasError)
+        $el.scrollIntoView()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <div class="submit">
-    <Overlay :value="overlay"/>
+    <Overlay :value="overlay" />
     <div class="text-center">
       <p class="title">
         You have reached the end!
@@ -11,8 +11,14 @@
       <p>
         Before submitting, please answer the question below
       </p>
-      <v-form ref="form" class="d-flex flex-column align-center">
-        <div style="opacity: 0.6" class="mt-4">
+      <v-form
+        ref="form"
+        class="d-flex flex-column align-center"
+      >
+        <div
+          style="opacity: 0.6"
+          class="mt-4"
+        >
           Have you ever interacted with a robot in real life?
         </div>
         <v-radio-group
@@ -26,18 +32,29 @@
           <v-radio
             label="Yes"
             value="1"
-          ></v-radio>
+          />
           <v-radio
             label="No"
             value="0"
-          ></v-radio>
+          />
         </v-radio-group>
-        <v-btn @click="submit" color="success" class="mt-6">
-          <v-icon left>mdi-send-circle-outline</v-icon>submit data
+        <v-btn
+          color="success"
+          class="mt-6"
+          @click="submit"
+        >
+          <v-icon left>
+            mdi-send-circle-outline
+          </v-icon>submit data
         </v-btn>
       </v-form>
     </div>
-    <v-alert type="error" outlined v-if="error" class="mt-8">
+    <v-alert
+      v-if="error"
+      type="error"
+      outlined
+      class="mt-8"
+    >
       <div class="d-flex justify-space-between">
         <p>Some error occurred while saving the data</p>
         <v-btn
@@ -45,7 +62,9 @@
           color="error"
           :href="`mailto:valentin.loftsson@epfl.ch,paul.griesser@epfl.ch?body=${message}`"
         >
-          <v-icon left>mdi-email</v-icon>
+          <v-icon left>
+            mdi-email
+          </v-icon>
           Report error
         </v-btn>
       </div>
@@ -59,41 +78,41 @@
 </template>
 
 <script>
-import uploadData from '@/utils/upload-data';
+import uploadData from '@/utils/upload-data'
 import {
-  setSubmitted, setLatestCompletedStep, getItem, setItem,
-} from '@/utils/local-storage';
-import Overlay from '@/components/Overlay.vue';
+  setSubmitted, setLatestCompletedStep, getItem, setItem
+} from '@/utils/local-storage'
+import Overlay from '@/components/Overlay.vue'
 
 export default {
   name: 'Submit',
   components: {
-    Overlay,
+    Overlay
   },
-  data() {
+  data () {
     return {
       overlay: false,
       error: false,
       message: '',
-      robotRealLife: null,
-    };
+      robotRealLife: null
+    }
   },
   methods: {
-    async submit() {
-      const formValid = this.$refs.form.validate();
+    async submit () {
+      const formValid = this.$refs.form.validate()
 
       if (formValid) {
         try {
-          this.overlay = true;
+          this.overlay = true
 
           // Add the answer to the question
           // "Have you ever interacted with a robot in real life?"
           // to local storage
-          const generalInfo = JSON.parse(getItem('general'));
-          generalInfo.robotRealLife = this.robotRealLife;
-          setItem('general', JSON.stringify(generalInfo));
+          const generalInfo = JSON.parse(getItem('general'))
+          generalInfo.robotRealLife = this.robotRealLife
+          setItem('general', JSON.stringify(generalInfo))
 
-          await uploadData();
+          await uploadData()
 
           // Clear storage? Perhaps not just in case something goes wrong
           // clearStorage();
@@ -101,26 +120,26 @@ export default {
           window.setTimeout(() => {
             // Save user's progress as "submitted"
             // so that he/she can't repeat the experiment
-            setSubmitted();
+            setSubmitted()
 
-            setLatestCompletedStep(null);
+            setLatestCompletedStep(null)
 
-            console.info('Data uploaded successfully');
+            console.info('Data uploaded successfully')
 
             // Redirect user to /thanks
             this.$router.replace('/thanks').catch((err) => {
-              console.error(err);
-            });
-          }, 1500);
+              console.error(err)
+            })
+          }, 1500)
         } catch (err) {
-          this.error = true;
-          this.message = err;
-          console.error(err);
+          this.error = true
+          this.message = err
+          console.error(err)
         } finally {
-          this.overlay = false;
+          this.overlay = false
         }
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>

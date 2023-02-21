@@ -1,5 +1,8 @@
 <template>
-  <v-alert type="success" outlined>
+  <v-alert
+    type="success"
+    outlined
+  >
     <strong>Data uploaded successfully</strong>
     <div>Thank your for participating</div>
     <div>We hope you enjoyed it</div>
@@ -9,6 +12,6 @@
 
 <script>
 export default {
-  name: 'Thanks',
-};
+  name: 'Thanks'
+}
 </script>

@@ -1,13 +1,13 @@
-const setItem = (key, item) => window.localStorage.setItem(key, item);
-const getItem = (key) => window.localStorage.getItem(key);
+const setItem = (key, item) => window.localStorage.setItem(key, item)
+const getItem = (key) => window.localStorage.getItem(key)
 
-const setLatestCompletedStep = (path) => setItem('latestCompletedStep', path);
-const getLatestCompletedStep = () => getItem('latestCompletedStep');
+const setLatestCompletedStep = (path) => setItem('latestCompletedStep', path)
+const getLatestCompletedStep = () => getItem('latestCompletedStep')
 
-const setSubmitted = () => setItem('submitted', true);
-const getSubmitted = () => getItem('submitted');
+const setSubmitted = () => setItem('submitted', true)
+const getSubmitted = () => getItem('submitted')
 
-const clearStorage = () => window.localStorage.clear();
+const clearStorage = () => window.localStorage.clear()
 
 export {
   setItem,
@@ -16,5 +16,5 @@ export {
   getLatestCompletedStep,
   setSubmitted,
   getSubmitted,
-  clearStorage,
-};
+  clearStorage
+}

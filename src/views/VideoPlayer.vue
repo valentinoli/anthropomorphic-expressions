@@ -1,12 +1,11 @@
 <template>
   <div class="video-container">
-    <div id="affdexElements"></div>
+    <div id="affdexElements" />
     <video id="robotVideo">
       <source
-        :src="`${
-          require(`@/assets/video/video${idParam}.mp4`)
-        }#t=${playbackRange}`"
-        type="video/mp4">
+        :src="src"
+        type="video/mp4"
+      >
       <p>
         Your browser does not support HTML5 video
       </p>
@@ -14,7 +13,7 @@
     <v-overlay
       :value="overlay"
       absolute
-      opacity=0.7
+      opacity="0.7"
     >
       <template v-if="warning">
         <div>
@@ -28,18 +27,17 @@
         <v-progress-circular
           indeterminate
           size="64"
-        >
-        </v-progress-circular>
+        />
       </template>
       <template v-else>
         <div class="mb-3">
           Please make sure your audio is on
         </div>
         <v-btn
-          @click="onPlayButtonClick"
           fab
           light
           large
+          @click="onPlayButtonClick"
         >
           <v-icon>mdi-play</v-icon>
         </v-btn>
@@ -49,59 +47,62 @@
 </template>
 
 <script>
-import WebcamDetectorAndVideoInterplay from '@/utils/webcam-video-interplay';
-import { setLatestCompletedStep, setItem } from '@/utils/local-storage';
-import playbackRanges from '@/utils/playback-range';
-import processResults from '@/utils/process-affdex-predictions';
+import WebcamDetectorAndVideoInterplay from '@/utils/webcam-video-interplay'
+import { setLatestCompletedStep, setItem } from '@/utils/local-storage'
+import playbackRanges from '@/utils/playback-range'
+import processResults from '@/utils/process-affdex-predictions'
 
 export default {
-  name: 'Video',
-  data() {
+  name: 'VideoPlayer',
+  data () {
+    const idParam = Number(this.$route.params.id)
     return {
       overlay: true,
       loading: true,
       warning: false,
-    };
+      idParam,
+      playbackRange: playbackRanges[idParam - 1],
+      src: undefined
+    }
   },
-  computed: {
-    idParam() {
-      return Number(this.$route.params.id);
-    },
-    playbackRange() {
-      return playbackRanges[this.idParam - 1];
-    },
+  async created () {
+    const src = await import(
+      `@/assets/video/video${this.idParam}.mp4`
+    )
+    console.log(src)
+    this.src = `${src}#t=${this.playbackRange}`
   },
-  mounted() {
-    const videoEl = this.$el.querySelector('#robotVideo');
-    this.interplay = new WebcamDetectorAndVideoInterplay(this, videoEl);
+  mounted () {
+    const videoEl = this.$el.querySelector('#robotVideo')
+    this.interplay = new WebcamDetectorAndVideoInterplay(this, videoEl)
 
-    videoEl.addEventListener('canplaythrough', this.onVideoCanplaythrough);
-    videoEl.addEventListener('play', this.onVideoPlay);
-    videoEl.addEventListener('pause', this.onVideoPause);
+    videoEl.addEventListener('canplaythrough', this.onVideoCanplaythrough)
+    videoEl.addEventListener('play', this.onVideoPlay)
+    videoEl.addEventListener('pause', this.onVideoPause)
   },
   methods: {
-    onVideoCanplaythrough() {
+    onVideoCanplaythrough () {
       // The browser estimates it can play the media
       // up to its end without stopping for content buffering.
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event
       // Display play button after a short timeout
       window.setTimeout(() => {
-        this.loading = false;
-      }, 500);
+        this.loading = false
+      }, 500)
     },
-    onPlayButtonClick() {
+    onPlayButtonClick () {
       // User clicks play button
       // --> start detector and show loading state
-      this.interplay.startDetector();
-      this.loading = true;
+      this.interplay.startDetector()
+      this.loading = true
     },
-    onVideoPlay() {
+    onVideoPlay () {
       // Video starts playing after detector has started
       // (see interplay class onInitializeSuccess method)
       // --> hide overlay
-      this.overlay = false;
+      this.overlay = false
     },
-    onVideoPause() {
+    onVideoPause () {
       // Video doesn't necessarily stop at the end
       // since we specify a playback range
       // so we have to listen for the "pause" event
@@ -110,36 +111,36 @@ export default {
       // (perhaps programmatically in the console!)
 
       // Stop the detector and show overlay loading state
-      this.interplay.stopDetector();
-      this.overlay = true;
+      this.interplay.stopDetector()
+      this.overlay = true
 
       // Process the predictions and save data in local storage
-      const { timestamps, results } = this.interplay.data;
-      const processedResults = processResults(results);
-      const data = { timestamps, data: processedResults };
-      const dataKey = `video_${this.idParam}`;
-      setItem(dataKey, JSON.stringify(data));
+      const { timestamps, results } = this.interplay.data
+      const processedResults = processResults(results)
+      const data = { timestamps, data: processedResults }
+      const dataKey = `video_${this.idParam}`
+      setItem(dataKey, JSON.stringify(data))
 
       window.setTimeout(() => {
         // Set the latest completed step of the current participant
         // and save it in browser's local storage
-        setLatestCompletedStep(this.$route.path);
+        setLatestCompletedStep(this.$route.path)
 
         // Redirect user to the survey when data has been saved
-        const nextPath = `/survey/${this.idParam}`;
-        this.$router.replace(nextPath);
-      }, 1000);
+        const nextPath = `/survey/${this.idParam}`
+        this.$router.replace(nextPath)
+      }, 1000)
     },
-    setWarning(warning) {
+    setWarning (warning) {
       // Function called in webcam-video-interplay
       if (warning || this.warning) {
         // warning state is changing
-        this.warning = warning;
-        this.overlay = warning;
+        this.warning = warning
+        this.overlay = warning
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>

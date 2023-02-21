@@ -2,11 +2,11 @@
   <v-overlay
     :value="value"
   >
-    <slot></slot>
+    <slot />
     <v-progress-circular
       indeterminate
       size="64"
-    ></v-progress-circular>
+    />
   </v-overlay>
 </template>
 
@@ -14,7 +14,7 @@
 export default {
   name: 'Overlay',
   props: {
-    value: Boolean,
-  },
-};
+    value: Boolean
+  }
+}
 </script>

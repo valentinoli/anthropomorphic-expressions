@@ -23,8 +23,8 @@ export default {
       iv2: ['Ignorant', 'Knowledgeable'],
       iv3: ['Irresponsible', 'Responsible'],
       iv4: ['Unintelligent', 'Intelligent'],
-      iv5: ['Foolish', 'Sensible'],
-    },
+      iv5: ['Foolish', 'Sensible']
+    }
   },
   fr: {
     title: 'Veuillez noter vos impressions au sujet du robot sur les échelles ci-dessous',
@@ -50,8 +50,8 @@ export default {
       iv2: ['Ignorant', 'Cultivé'],
       iv3: ['Irresponsable', 'Responsable'],
       iv4: ['Inintelligent', 'Intelligent'],
-      iv5: ['Insensé', 'Sensé'],
-    },
+      iv5: ['Insensé', 'Sensé']
+    }
   },
   de: {
     title: 'Bitte beurteilen sie Ihren Eindruck des Roboters auf diesen Skalen',
@@ -77,8 +77,8 @@ export default {
       iv2: ['Ungebildet', 'Unterrichtet'],
       iv3: ['Verantwortungslos', 'Verantwortungsbewusst'],
       iv4: ['Unintelligent', 'Intelligent'],
-      iv5: ['Unvernünftig', 'Vernünftig'],
-    },
+      iv5: ['Unvernünftig', 'Vernünftig']
+    }
   },
   es: {
     title: 'Por favor de su opinión del robot en los siguientes aspectos',
@@ -104,7 +104,7 @@ export default {
       iv2: ['Ignorante', 'Culto'],
       iv3: ['Irresponsable', 'Responsable'],
       iv4: ['Sin inteligencia', 'Inteligente'],
-      iv5: ['Insensato', 'Juicioso'],
-    },
-  },
-};
+      iv5: ['Insensato', 'Juicioso']
+    }
+  }
+}

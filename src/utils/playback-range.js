@@ -2,5 +2,5 @@
 // Playback ranges for the videos
 export default [
   '71,150', // first
-  '26,85', // second
-];
+  '26,85' // second
+]

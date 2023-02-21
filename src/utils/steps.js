@@ -7,5 +7,5 @@ export default {
   '/survey/2': 'Survey 2',
   '/questionnaire/aq10': 'Questionnaire 1',
   '/questionnaire/spqb': 'Questionnaire 2',
-  '/submit': 'Submit',
-};
+  '/submit': 'Submit'
+}
