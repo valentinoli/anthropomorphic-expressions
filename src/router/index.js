@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-// import { getLatestCompletedStep, getSubmitted } from '@/utils/local-storage'
-// import steps from '@/utils/steps'
+import { getLatestCompletedStep, getSubmitted } from '@/utils/local-storage'
+import steps from '@/utils/steps'
 
-// const stepPaths = Object.keys(steps)
+const stepPaths = Object.keys(steps)
 
 const routes = [
   {
@@ -64,44 +64,44 @@ const router = createRouter({
   }
 })
 
-// router.beforeEach((to, from, next) => {
-//   const latestCompletedStep = getLatestCompletedStep()
-//   const submitted = getSubmitted()
+router.beforeEach((to, from, next) => {
+  const latestCompletedStep = getLatestCompletedStep()
+  const submitted = getSubmitted()
 
-//   if (submitted && to.path === '/thanks') {
-//     return next()
-//   }
+  if (submitted && to.path === '/thanks') {
+    return next()
+  }
 
-//   if ((!latestCompletedStep || latestCompletedStep === '/') &&
-//     to.path === '/') {
-//     // User allowed to navigate to index,
-//     // but not during the experiment
-//     return next()
-//   }
+  if ((!latestCompletedStep || latestCompletedStep === '/') &&
+    to.path === '/') {
+    // User allowed to navigate to index,
+    // but not during the experiment
+    return next()
+  }
 
-//   const isNextStep = (stepPaths.indexOf(to.path) - stepPaths.indexOf(latestCompletedStep)) === 1
+  const isNextStep = (stepPaths.indexOf(to.path) - stepPaths.indexOf(latestCompletedStep)) === 1
 
-//   if (isNextStep && latestCompletedStep) {
-//     // User allowed to continue to the next step
-//     // if previous step is completed
-//     return next()
-//   }
+  if (isNextStep && latestCompletedStep) {
+    // User allowed to continue to the next step
+    // if previous step is completed
+    return next()
+  }
 
-//   if (latestCompletedStep) {
-//     const currentStep = stepPaths[stepPaths.indexOf(latestCompletedStep) + 1]
+  if (latestCompletedStep) {
+    const currentStep = stepPaths[stepPaths.indexOf(latestCompletedStep) + 1]
 
-//     if (currentStep === to.path) {
-//       // Allow user to stay on current step
-//       return next()
-//     }
+    if (currentStep === to.path) {
+      // Allow user to stay on current step
+      return next()
+    }
 
-//     // User might have tried to navigate manually
-//     // to another endpoint. Navigate him back.
-//     return next(currentStep)
-//   }
+    // User might have tried to navigate manually
+    // to another endpoint. Navigate him back.
+    return next(currentStep)
+  }
 
-//   // Otherwise, user not allowed to navigate manually at all
-//   return next(false)
-// })
+  // Otherwise, user not allowed to navigate manually at all
+  return next(false)
+})
 
 export default router

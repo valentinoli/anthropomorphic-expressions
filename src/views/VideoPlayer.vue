@@ -54,7 +54,6 @@ export default {
   name: 'VideoPlayer',
   data () {
     const idParam = Number(this.$route.params.id)
-    console.log(idParam)
     return {
       overlay: true,
       loading: true,
@@ -65,18 +64,14 @@ export default {
     }
   },
   created () {
-    console.log(this.idParam)
-    // const srcUrl = await import(`@/assets/video/video${this.idParam}.mp4`)
     const src = new URL(
       `/src/assets/video/video${this.idParam}.mp4`,
       import.meta.url
     ).href
-    console.log(src)
     this.src = `${src}#t=${this.playbackRange}`
   },
   mounted () {
     const videoEl = this.$el.querySelector('#robotVideo')
-    console.log(videoEl)
     this.interplay = new WebcamDetectorAndVideoInterplay(this, videoEl)
 
     videoEl.addEventListener('canplaythrough', this.onVideoCanplaythrough)
@@ -85,7 +80,6 @@ export default {
   },
   methods: {
     onVideoCanplaythrough () {
-      console.log('canplay')
       // The browser estimates it can play the media
       // up to its end without stopping for content buffering.
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event
@@ -101,7 +95,6 @@ export default {
       this.loading = true
     },
     onVideoPlay () {
-      console.log('play')
       // Video starts playing after detector has started
       // (see interplay class onInitializeSuccess method)
       // --> hide overlay

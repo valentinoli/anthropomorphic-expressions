@@ -235,58 +235,58 @@ export default {
       })
     },
     testCameraDetector () {
-      // this.overlay = true
-      // let attempts = 0
-      // let successes = 0
+      this.overlay = true
+      let attempts = 0
+      let successes = 0
 
-      // // See proper documentation of below code in webcam-video-interplay.js
-      // const divRoot = document.getElementById('affdexElements')
-      // const width = 640
-      // const height = 480
-      // const faceMode = affdex.FaceDetectorMode.LARGE_FACES
+      // See proper documentation of below code in webcam-video-interplay.js
+      const divRoot = document.getElementById('affdexElements')
+      const width = 640
+      const height = 480
+      const faceMode = affdex.FaceDetectorMode.LARGE_FACES
 
-      // const detector = new affdex.CameraDetector(divRoot, width, height, faceMode)
+      const detector = new affdex.CameraDetector(divRoot, width, height, faceMode)
 
-      // detector.detectAllEmotions()
-      // detector.detectAllExpressions()
-      // detector.detectAllEmojis()
-      // detector.detectAllAppearance()
+      detector.detectAllEmotions()
+      detector.detectAllExpressions()
+      detector.detectAllEmojis()
+      detector.detectAllAppearance()
 
-      // detector.addEventListener('onInitializeSuccess', () => console.info('The detector reports initialized'))
-      // detector.addEventListener('onInitializeFailure', (err) => console.error(err))
-      // detector.addEventListener('onStopSuccess', () => {
-      //   console.info('The detector reports stopped')
-      //   const successRate = successes / attempts
-      //   if (successRate > 0.95) {
-      //     this.faceDetected = true
-      //   } else {
-      //     this.faceDetected = false
-      //     console.info(`${Math.round(successRate * 100)}% face detection success rate`)
-      //   }
+      detector.addEventListener('onInitializeSuccess', () => console.info('The detector reports initialized'))
+      detector.addEventListener('onInitializeFailure', (err) => console.error(err))
+      detector.addEventListener('onStopSuccess', () => {
+        console.info('The detector reports stopped')
+        const successRate = successes / attempts
+        if (successRate > 0.95) {
+          this.faceDetected = true
+        } else {
+          this.faceDetected = false
+          console.info(`${Math.round(successRate * 100)}% face detection success rate`)
+        }
 
-      //   this.testedFaceDetection = true
-      //   this.overlay = false
-      // })
+        this.testedFaceDetection = true
+        this.overlay = false
+      })
 
-      // detector.addEventListener('onImageResultsSuccess', (faces) => {
-      //   const success = faces.length === 1
-      //   attempts += 1
-      //   if (success) {
-      //     this.faceDetected = true
-      //     console.info('Face detected')
-      //     successes += 1
-      //   } else {
-      //     this.faceDetected = false
-      //     console.warn('Face not detected')
-      //   }
+      detector.addEventListener('onImageResultsSuccess', (faces) => {
+        const success = faces.length === 1
+        attempts += 1
+        if (success) {
+          this.faceDetected = true
+          console.info('Face detected')
+          successes += 1
+        } else {
+          this.faceDetected = false
+          console.warn('Face not detected')
+        }
 
-      //   if (attempts > 100) {
-      //     detector.removeEventListener('onImageResultsSuccess')
-      //     detector.stop()
-      //   }
-      // })
+        if (attempts > 100) {
+          detector.removeEventListener('onImageResultsSuccess')
+          detector.stop()
+        }
+      })
 
-      // detector.start()
+      detector.start()
       this.faceDetected = true
       this.testedFaceDetection = true
     },
