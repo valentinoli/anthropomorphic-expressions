@@ -1,7 +1,7 @@
 <template>
   <div class="font-weight-light">
     <QuestionnaireForm
-      :items="items"
+      :items-prop="items"
       :choices="choices"
       data-key="aq10"
     />
@@ -18,7 +18,6 @@ export default {
   },
   data () {
     return {
-      overlay: false,
       formOptions: [
         'Definitely Agree',
         'Slightly Agree',

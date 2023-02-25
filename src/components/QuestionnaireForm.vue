@@ -3,11 +3,12 @@
     <Overlay :value="overlay" />
     <v-form
       ref="form"
-      lazy-validation
+      @submit.prevent="submit"
     >
       <div class="d-flex flex-column">
         <div
           v-for="item in items"
+          :id="item.name"
           :key="item.name"
           class="d-flex flex-column align-center mb-6"
         >
@@ -16,17 +17,18 @@
           </div>
 
           <v-radio-group
-            :id="item.name"
             v-model="item.value"
+            :validation-value="item.value"
             :name="item.name"
             :rules="radioRules"
-            required
-            :row="$vuetify.breakpoint.smAndUp"
-            :column="$vuetify.breakpoint.xsOnly"
+            :inline="$vuetify.display.smAndUp"
+            validate-on="submit"
+            :error="item.error"
+            @update:model-value="(item.error = false)"
           >
             <v-radio
               v-for="choice in choices"
-              :key="choice.text"
+              :key="`${item.name}-${choice.text}`"
               :label="choice.text"
               :value="choice.value"
             />
@@ -38,11 +40,10 @@
         <v-btn
           class="mr-4 justify-center btn-submit"
           color="success"
-          @click="submit"
+          type="submit"
+          prepend-icon="mdi-send-circle-outline"
         >
-          <v-icon left>
-            mdi-send-circle-outline
-          </v-icon>submit
+          submit
         </v-btn>
       </v-row>
     </v-form>
@@ -55,6 +56,7 @@ import nextStep from '@/utils/next-step'
 import { setItem, setLatestCompletedStep } from '@/utils/local-storage'
 
 export default {
+  name: 'QuestionnaireForm',
   components: {
     Overlay
   },
@@ -63,7 +65,7 @@ export default {
       required: true,
       type: String
     },
-    items: {
+    itemsProp: {
       required: true,
       type: Array
     },
@@ -77,14 +79,15 @@ export default {
       overlay: false,
       radioRules: [
         (v) => v === 0 || !!v || ''
-      ]
+      ],
+      items: JSON.parse(JSON.stringify(this.itemsProp))
     }
   },
   methods: {
-    submit () {
-      const formValid = this.$refs.form.validate()
+    async submit () {
+      const { valid } = await this.$refs.form.validate()
 
-      if (formValid) {
+      if (valid) {
         this.overlay = true
 
         const data = this.items.map(({ name, value }) => ({ name, value }))
@@ -140,8 +143,9 @@ export default {
         }, 1000)
       } else {
         // Scroll to first error
-        const { $el } = this.$refs.form.inputs.find(({ hasError }) => hasError)
-        $el.scrollIntoView()
+        const item = this.$refs.form.items.find(e => !e.isValid)
+        this.items.forEach(i => (i.error = i.name === item.id))
+        document.getElementById(item.id).scrollIntoView()
       }
     }
   }

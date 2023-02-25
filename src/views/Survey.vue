@@ -18,60 +18,77 @@
     <v-row>
       <v-form
         ref="form"
-        lazy-validation
+        @submit.prevent="submit"
       >
-        <p class="title font-weight-medium text-center">
+        <p class="text-h6 font-weight-medium text-center">
           {{ form.title }}
         </p>
 
-        <div class="d-flex flex-column">
-          <div
-            v-for="item in form.items"
-            :key="item.name"
-            class="d-flex flex-column flex-sm-row align-center mb-12 mb-sm-0"
+        <v-container class="d-flex flex-column align-center justify-center">
+          <v-row
+            class="align-center justify-center"
+            no-gutters
           >
-            <div
-              :class="
-                $vuetify.breakpoint.smAndUp
-                  ? 'radio-lowlabel-desktop'
-                  : ''
-              "
+            <template
+              v-for="item in form.items"
+              :key="item.name"
             >
-              {{ item.lowLabel }}
-            </div>
+              <v-col
+                :id="item.name"
+                cols="12"
+                sm="3"
+                lg="4"
+                class="d-flex justify-center justify-sm-end"
+              >
+                <span>{{ item.lowLabel }}</span>
+              </v-col>
 
-            <v-radio-group
-              :id="item.name"
-              v-model="item.value"
-              :name="item.name"
-              :rules="radioRules"
-              required
-              :row="$vuetify.breakpoint.smAndUp"
-              :column="$vuetify.breakpoint.xsOnly"
-            >
-              <v-radio
-                v-for="n in 5"
-                :key="`${item.name}-${n}`"
-                :label="`${n}`"
-                :value="n"
-              />
-            </v-radio-group>
+              <v-col
+                cols="12"
+                sm="6"
+                lg="4"
+                xl="3"
+              >
+                <v-radio-group
+                  v-model="item.value"
+                  :validation-value="item.value"
+                  :name="item.name"
+                  :rules="radioRules"
+                  :inline="$vuetify.display.smAndUp"
+                  class="d-flex align-center justify-center"
+                  validate-on="submit"
+                  :error="item.error"
+                  @update:model-value="(item.error = false)"
+                >
+                  <v-radio
+                    v-for="n in 5"
+                    :key="`${item.name}-${n}`"
+                    :label="`${n}`"
+                    :value="n"
+                  />
+                </v-radio-group>
+              </v-col>
 
-            <div>
-              {{ item.highLabel }}
-            </div>
-          </div>
-        </div>
+              <v-col
+                cols="12"
+                sm="3"
+                lg="4"
+                class="d-flex justify-center justify-sm-start mb-12 mb-sm-0"
+              >
+                <span>{{ item.highLabel }}</span>
+              </v-col>
+            </template>
+          </v-row>
+        </v-container>
 
         <v-row justify="center">
           <v-btn
             class="mr-4 justify-center btn-submit"
             color="success"
-            @click="submit"
+            type="submit"
+            prepend-icon="mdi-send-circle-outline"
           >
-            <v-icon left>
-              mdi-send-circle-outline
-            </v-icon>{{ form.submitText }}
+            {{ form.submitText }}
           </v-btn>
         </v-row>
       </v-form>
@@ -98,6 +115,7 @@ export default {
       langs: Object.keys(survey),
       selectedLang: 'en',
       overlay: false,
+      form: undefined,
       radioRules: [
         (v) => !!v || ''
       ]
@@ -118,10 +136,10 @@ export default {
       this.selectedLang = lang
       this.updateForm()
     },
-    submit () {
-      const formValid = this.$refs.form.validate()
+    async submit () {
+      const { valid } = await this.$refs.form.validate()
 
-      if (formValid) {
+      if (valid) {
         this.overlay = true
         const { $route: { params, path } } = this
         const idParam = Number(params.id)
@@ -143,8 +161,9 @@ export default {
         }, 1000)
       } else {
         // Scroll to first error
-        const { $el } = this.$refs.form.inputs.find(({ hasError }) => hasError)
-        $el.scrollIntoView()
+        const item = this.$refs.form.items.find(e => !e.isValid)
+        this.form.items.forEach(i => (i.error = i.name === item.id))
+        document.getElementById(item.id).scrollIntoView()
       }
     },
     updateForm () {
@@ -180,12 +199,6 @@ export default {
 
 .v-form {
   width: 100%;
-}
-
-.radio-lowlabel-desktop {
-  text-align: right;
-  margin-right: 16px;
-  width: calc(50% - 150px);
 }
 
 .form__item {

@@ -1,7 +1,7 @@
 <template>
   <div class="font-weight-light">
     <QuestionnaireForm
-      :items="items"
+      :items-prop="items"
       :choices="choices"
       data-key="sqpb"
     />
@@ -18,7 +18,6 @@ export default {
   },
   data () {
     return {
-      overlay: false,
       choices: [
         { text: 'Yes', value: 1 },
         { text: 'No', value: 0 }

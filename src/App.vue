@@ -102,8 +102,6 @@ import steps from '@/utils/steps'
 
 export default {
   name: 'App',
-  components: {
-  },
   data: () => ({
     steps: Object.entries(steps),
     currentStep: 1

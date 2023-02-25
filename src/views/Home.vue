@@ -217,15 +217,13 @@ export default {
       src: valentinSrc,
       name: 'Valentin Oliver Loftsson',
       role: 'Data Science, MSc',
-      institution: 'EPFL',
-      email: 'valentin.loftsson@epfl.ch'
+      institution: 'EPFL'
     },
     {
       src: paulSrc,
       name: 'Paul Griesser',
       role: 'Data Science, MSc',
-      institution: 'EPFL',
-      email: 'paul.griesser@epfl.ch'
+      institution: 'EPFL'
     },
     {
       src: ahmadSrc,

@@ -14,6 +14,7 @@
       <v-form
         ref="form"
         class="d-flex flex-column align-center"
+        @submit.prevent="submit"
       >
         <div
           style="opacity: 0.6"
@@ -23,11 +24,10 @@
         </div>
         <v-radio-group
           v-model="robotRealLife"
-          required
           :rules="[
             (v) => !!v || '',
           ]"
-          row
+          inline
         >
           <v-radio
             label="Yes"
@@ -41,11 +41,10 @@
         <v-btn
           color="success"
           class="mt-6"
-          @click="submit"
+          type="submit"
+          prepend-icon="mdi-send-circle-outline"
         >
-          <v-icon left>
-            mdi-send-circle-outline
-          </v-icon>submit data
+          submit data
         </v-btn>
       </v-form>
     </div>
@@ -60,7 +59,7 @@
         <v-btn
           depressed
           color="error"
-          :href="`mailto:valentin.loftsson@epfl.ch,paul.griesser@epfl.ch?body=${message}`"
+          :href="`mailto:valentin.loftsson@gmail.com?body=${message}`"
         >
           <v-icon left>
             mdi-email
@@ -78,7 +77,7 @@
 </template>
 
 <script>
-import uploadData from '@/utils/upload-data'
+// import uploadData from '@/utils/upload-data'
 import {
   setSubmitted, setLatestCompletedStep, getItem, setItem
 } from '@/utils/local-storage'
@@ -99,9 +98,9 @@ export default {
   },
   methods: {
     async submit () {
-      const formValid = this.$refs.form.validate()
+      const { valid } = await this.$refs.form.validate()
 
-      if (formValid) {
+      if (valid) {
         try {
           this.overlay = true
 
@@ -112,7 +111,7 @@ export default {
           generalInfo.robotRealLife = this.robotRealLife
           setItem('general', JSON.stringify(generalInfo))
 
-          await uploadData()
+          // await uploadData()
 
           // Clear storage? Perhaps not just in case something goes wrong
           // clearStorage();

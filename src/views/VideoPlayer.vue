@@ -16,9 +16,9 @@
       absolute
       content-class="v-overlay__content-video"
     >
-      <template v-if="warning">
+      <template v-if="overlayText">
         <div>
-          {{ warning }}
+          {{ overlayText }}
         </div>
       </template>
       <template v-else-if="loading">
@@ -58,7 +58,7 @@ export default {
     return {
       overlay: true,
       loading: true,
-      warning: false,
+      overlayText: '',
       idParam,
       playbackRange: playbackRanges[idParam - 1],
       src: undefined
@@ -106,6 +106,7 @@ export default {
       // (see interplay class onInitializeSuccess method)
       // --> hide overlay
       this.overlay = false
+      this.loading = false
     },
     onVideoPause () {
       // Video doesn't necessarily stop at the end
@@ -118,6 +119,7 @@ export default {
       // Stop the detector and show overlay loading state
       this.interplay.stopDetector()
       this.overlay = true
+      this.loading = true
 
       // Process the predictions and save data in local storage
       const { timestamps, results } = this.interplay.data
@@ -138,10 +140,10 @@ export default {
     },
     setWarning (warning) {
       // Function called in webcam-video-interplay
-      if (warning || this.warning) {
+      if (warning || this.overlayText) {
         // warning state is changing
-        this.warning = warning
-        this.overlay = warning
+        this.overlayText = warning
+        this.overlay = true
       }
     }
   }
