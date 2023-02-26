@@ -88,10 +88,16 @@
         <a
           href="mailto:valentin.loftsson@epfl.ch,paul.griesser@epfl.ch"
           target="_blank"
-          class="contact-link"
-        >
-          Contact
-        </a>
+          rel="noopener noreferrer"
+          class="footer-link"
+        >Contact</a>
+        -
+        <a
+          href="https://github.com/valentinoli/anthropomorphic-expressions"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-link"
+        >GitHub</a>
       </div>
     </v-footer>
   </v-app>
@@ -140,12 +146,12 @@ section h2 {
   padding: 24px;
 }
 
-.contact-link {
+.footer-link {
   color: white !important;
   text-decoration: none;
 }
 
-.contact-link:hover {
+.footer-link:hover {
   text-decoration: underline;
 }
 
