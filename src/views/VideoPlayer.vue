@@ -133,10 +133,11 @@ export default {
     },
     setWarning (warning) {
       // Function called in webcam-video-interplay
-      if (warning || this.overlayText) {
+      const hasWarning = Boolean(warning || this.overlayText)
+      this.overlay = hasWarning
+      if (hasWarning) {
         // warning state is changing
         this.overlayText = warning
-        this.overlay = true
       }
     }
   }
