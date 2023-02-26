@@ -287,8 +287,6 @@ export default {
       })
 
       detector.start()
-      this.faceDetected = true
-      this.testedFaceDetection = true
     },
     async submitForm () {
       const { valid } = await this.$refs.form.validate()
